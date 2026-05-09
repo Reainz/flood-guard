@@ -16,11 +16,11 @@ export default function LeafletMap({ lat, lon, riskLevel, stationName }) {
   const mapRef       = useRef(null);
 
   useEffect(() => {
-    let map;
+    let cancelled = false;
     getLeaflet().then((leaflet) => {
-      if (!containerRef.current || mapRef.current) return;
-      map = leaflet.map(containerRef.current, { zoomControl: false, attributionControl: false })
-                   .setView([lat, lon], 12);
+      if (cancelled || !containerRef.current || mapRef.current) return;
+      const map = leaflet.map(containerRef.current, { zoomControl: false, attributionControl: false })
+                         .setView([lat, lon], 12);
       leaflet.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 18,
       }).addTo(map);
@@ -41,6 +41,7 @@ export default function LeafletMap({ lat, lon, riskLevel, stationName }) {
     });
 
     return () => {
+      cancelled = true;
       if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; }
     };
   }, [lat, lon, riskLevel, stationName]);
