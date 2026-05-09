@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import { DataBanner, FormField } from "../components/SharedUI.jsx";
 import { getFloodStatus, postHarvestDecision } from "../services/api.js";
+import { LossBarChart } from "../components/charts/LossBarChart.jsx";
 
 const initialForm = {
   planting_date: "2026-02-03",
@@ -246,6 +247,16 @@ function HarvestResult({ data, t }) {
             </div>
           );
         })()}
+
+        <LossBarChart
+          scenarios={scenarios.map((s, i) => ({
+            label: s.label,
+            labelShort: i === 0 ? "Thu hoạch ngay" : i === 1 ? "Chờ lũ" : "Sau lũ",
+            loss_pct: Math.round(s.loss_pct),
+            is_recommended: s.is_recommended,
+            color: scenarioCfgs[i]?.tc || "#00C97B",
+          }))}
+        />
       </div>
 
       {/* Growth stage + Compensation */}
