@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useMemo, useState } from "react";
 
 import { ChecklistItem, DataBanner, FormField } from "../components/SharedUI.jsx";
+import { EvidenceDonut } from "../components/charts/EvidenceDonut.jsx";
 import { apiUrl, postLossReport } from "../services/api.js";
 
 const maxPhotoBytes = 5 * 1024 * 1024;
@@ -268,15 +269,11 @@ export function LossProof({ t }) {
         </div>
 
         {/* Proof score */}
-        <div className="proof-status">
-          <div className="proof-icon">📄</div>
+        <div className="proof-status" style={{ display: "flex", gap: 16, alignItems: "center" }}>
+          <EvidenceDonut pct={proofPct} label="Evidence" />
           <div style={{ flex: 1 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-              <span style={{ fontSize: 13, fontWeight: 600 }}>Evidence completeness</span>
-              <span className="proof-score">{proofPct}%</span>
-            </div>
-            <progress value={proofPct} max="100" />
-            <div style={{ fontSize: 11, color: "var(--text2)", marginTop: 5 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>Evidence completeness</div>
+            <div style={{ fontSize: 11, color: "var(--text2)" }}>
               {proofPct >= 100
                 ? "✓ Evidence package complete — ready to submit."
                 : proofPct >= 80
