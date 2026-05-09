@@ -1,0 +1,277 @@
+{
+  "app": {
+    "title": "FloodGuard Việt Nam",
+    "track": "Asian Hackathon for Green Future 2026",
+    "mvp": "MVP địa phương",
+    "navigation": "Điều hướng chính"
+  },
+  "tabs": {
+    "dashboard": "Lũ",
+    "harvest": "Thu hoạch",
+    "alerts": "Cảnh báo",
+    "proof": "Hồ sơ"
+  },
+  "common": {
+    "loading": "Đang tải",
+    "loadError": "Không thể tải dữ liệu. Vui lòng kiểm tra backend.",
+    "staleData": "Dữ liệu cũ - cập nhật lần cuối: {time}",
+    "cachedData": "Đang dùng dữ liệu lưu tạm từ lần tải gần nhất.",
+    "backendCached": "Nguồn dữ liệu backend đang dùng cache.",
+    "demoData": "Backend chưa phản hồi; đang dùng dữ liệu demo để tiếp tục trình bày.",
+    "millionVnd": "triệu VND",
+    "sourceFreshness": "Độ mới nguồn dữ liệu",
+    "dataSources": "Nguồn dữ liệu",
+    "required": "Bắt buộc",
+    "valid": "Hợp lệ",
+    "invalid": "Chưa hợp lệ",
+    "ready": "Sẵn sàng",
+    "notReady": "Cần bổ sung",
+    "items": "{count} mục"
+  },
+  "risk": {
+    "LOW": "Thấp",
+    "MODERATE": "Trung bình",
+    "HIGH": "Cao",
+    "CRITICAL": "Khẩn cấp"
+  },
+  "tier": {
+    "WATCH": "Theo dõi",
+    "WARNING": "Cảnh báo",
+    "CRITICAL": "Khẩn cấp"
+  },
+  "freshness": {
+    "fresh": "Mới",
+    "stale": "Cũ",
+    "cached": "Cache",
+    "missing": "Thiếu",
+    "unknown": "Không rõ"
+  },
+  "confidence": {
+    "low": "Thấp",
+    "medium": "Trung bình",
+    "high": "Cao"
+  },
+  "sources": {
+    "openweather": "Mưa",
+    "mrc": "Sông",
+    "nasa": "NASA"
+  },
+  "river": {
+    "trend": "Xu hướng",
+    "riseRate": "Tốc độ dâng",
+    "alertLevel": "Mức báo động",
+    "dangerLevel": "Mức nguy hiểm",
+    "updated": "Cập nhật trạm",
+    "status": {
+      "NORMAL": "Bình thường",
+      "ALERT": "Báo động",
+      "DANGER": "Nguy hiểm"
+    },
+    "trendValue": {
+      "rising": "Đang dâng",
+      "falling": "Đang rút",
+      "steady": "Ổn định"
+    }
+  },
+  "dashboard": {
+    "eyebrow": "Theo dõi lũ",
+    "title": "Tình hình hiện tại",
+    "description": "Tóm tắt rủi ro lũ, mực nước sông và mưa dự báo cho ruộng demo.",
+    "currentRisk": "Rủi ro hiện tại",
+    "station": "Trạm",
+    "riverLevel": "Mực nước",
+    "arrival": "Lũ đến sau",
+    "depth": "Độ sâu dự kiến",
+    "duration": "Thời gian ngập",
+    "confidence": "Độ tin cậy",
+    "forecast": "Dự báo mưa",
+    "location": "Khu vực ruộng",
+    "locationSummary": "Vị trí demo: An Giang, gần trạm Tân Châu.",
+    "actionTitle": "Việc cần ưu tiên",
+    "actionLow": "Tiếp tục theo dõi mực nước và chuẩn bị vật tư cơ bản.",
+    "actionModerate": "Kiểm tra bờ bao, máy bơm và ruộng thấp trong hôm nay.",
+    "actionHigh": "Mở màn hình Thu hoạch để so sánh thiệt hại trước khi lũ đến.",
+    "actionCritical": "Ưu tiên thu hoạch hoặc di dời tài sản ở phần ruộng thấp ngay.",
+    "demoExplanation": "Mực nước đang ở mức báo động trong dữ liệu demo. Ước tính lũ đến trong 71 giờ."
+  },
+  "harvest": {
+    "eyebrow": "Quyết định mùa vụ",
+    "title": "So sánh phương án thu hoạch",
+    "description": "Nhập thông tin ruộng và điều kiện lũ để chọn phương án thiệt hại thấp nhất.",
+    "cropDetails": "Thông tin cây trồng",
+    "fieldDetails": "Thông tin ruộng",
+    "floodDetails": "Điều kiện lũ dự kiến",
+    "prefillReady": "Đã điền điều kiện lũ từ màn hình lũ.",
+    "prefillLoading": "Đang lấy điều kiện lũ mới nhất.",
+    "prefillFailed": "Không lấy được điều kiện lũ mới nhất; đang dùng giá trị demo.",
+    "plantingDate": "Ngày gieo sạ",
+    "crop": "Cây trồng",
+    "area": "Diện tích ha",
+    "elevation": "Độ cao ruộng",
+    "daysToFlood": "Số ngày trước lũ",
+    "depth": "Độ sâu cm",
+    "duration": "Số ngày ngập",
+    "submit": "Tính quyết định",
+    "stage": "Giai đoạn cây",
+    "daysToHarvest": "Ngày đến thu hoạch",
+    "recommended": "Khuyến nghị",
+    "compensation": "Hỗ trợ dự kiến",
+    "legalBasis": "Căn cứ",
+    "deadline": "Hạn nộp hồ sơ",
+    "actionSteps": "Bước thực hiện",
+    "lastResultKept": "Không gửi được yêu cầu mới; vẫn giữ kết quả gần nhất bên dưới.",
+    "noActionSteps": "Không có bước bổ sung.",
+    "demoGrowthStage": "Vào chắc - hạt đang chắc",
+    "demoLegalBasis": "Dữ liệu demo theo khung hỗ trợ địa phương",
+    "demoDeadline": "Nộp hồ sơ trong 15 ngày sau khi xác nhận thiệt hại",
+    "scenarioLabels": {
+      "harvest_now": "Thu hoạch ngay",
+      "wait": "Chờ lũ qua",
+      "harvest_after": "Thu hoạch sau lũ"
+    },
+    "scenarioReasoning": {
+      "harvest_now": "Giảm rủi ro ngập nhưng có thiệt hại do thu hoạch sớm.",
+      "wait": "Thiệt hại cao hơn vì cây phải chịu ngập trong nhiều ngày.",
+      "harvest_after": "Giữ thêm thời gian chín nhưng chất lượng giảm sau khi nước rút."
+    },
+    "scenarioAction": {
+      "harvest_now": "Liên hệ tổ máy gặt và ưu tiên thửa ruộng thấp trước."
+    },
+    "validation": {
+      "plantingDateRequired": "Vui lòng chọn ngày gieo sạ.",
+      "plantingDateFuture": "Ngày gieo sạ không được ở tương lai.",
+      "area": "Diện tích phải từ 0.1 đến 100 ha.",
+      "daysToFlood": "Số ngày trước lũ phải từ 1 đến 21.",
+      "depth": "Độ sâu phải từ 10 đến 200 cm.",
+      "duration": "Số ngày ngập phải từ 1 đến 30."
+    }
+  },
+  "crops": {
+    "rice": "Lúa",
+    "maize": "Bắp",
+    "vegetables": "Rau màu",
+    "fruit_trees": "Cây ăn trái"
+  },
+  "elevation": {
+    "low": "Thấp",
+    "medium": "Trung bình",
+    "high": "Cao"
+  },
+  "alerts": {
+    "eyebrow": "Cảnh báo vận hành",
+    "title": "Trạng thái cảnh báo",
+    "description": "Theo dõi mức cảnh báo đang hoạt động và gửi thử thông báo cho luồng demo.",
+    "activeTier": "Mức cảnh báo",
+    "station": "Trạm",
+    "actions": "Việc cần làm",
+    "reasons": "Lý do kích hoạt",
+    "dispatch": "Gửi thử cảnh báo",
+    "dispatchStatus": "Trạng thái gửi: {status}",
+    "dispatchDetail": "Chi tiết: {detail}",
+    "dispatchFailed": "Không gửi thử được cảnh báo. Vui lòng kiểm tra backend.",
+    "dispatchMode": "Mô phỏng SMS nếu Twilio chưa cấu hình.",
+    "demoDispatchDetail": "Backend chưa phản hồi; thao tác gửi được mô phỏng trong trình duyệt.",
+    "demo": {
+      "WATCH": {
+        "title": "Theo dõi",
+        "message": "Theo dõi mưa và mực nước trong 72 giờ tới.",
+        "action": "Chuẩn bị bao, máy bơm và kiểm tra ruộng thấp."
+      },
+      "WARNING": {
+        "title": "Cảnh báo lũ",
+        "message": "Lũ có thể đến trong 71 giờ với độ sâu khoảng 65 cm.",
+        "action": "Mở màn hình Thu hoạch và chọn phương án thiệt hại thấp nhất."
+      },
+      "CRITICAL": {
+        "title": "Khẩn cấp",
+        "message": "Lũ có thể đến trong dưới 24 giờ.",
+        "action": "Thu hoạch ngay phần ruộng thấp hoặc di tản theo hướng dẫn địa phương."
+      }
+    },
+    "status": {
+      "sent": "Đã gửi",
+      "simulated": "Đã mô phỏng"
+    }
+  },
+  "proof": {
+    "eyebrow": "Hồ sơ thiệt hại",
+    "title": "Tạo gói bằng chứng",
+    "description": "Thu thập thông tin ruộng, GPS và ảnh để tạo hồ sơ hỗ trợ sau lũ.",
+    "farmerDetails": "Thông tin người nộp",
+    "damageDetails": "Thiệt hại",
+    "evidenceDetails": "Bằng chứng",
+    "farmerName": "Tên nông dân",
+    "fieldId": "Mã thửa ruộng",
+    "crop": "Cây trồng",
+    "area": "Diện tích ha",
+    "lossPct": "Thiệt hại phần trăm",
+    "floodDuration": "Thời gian ngập",
+    "photos": "Ảnh thiệt hại",
+    "submit": "Tạo hồ sơ",
+    "photoRequirement": "Cần 2 đến 6 ảnh JPEG hoặc PNG, mỗi ảnh không quá 5MB.",
+    "reportId": "Mã hồ sơ",
+    "completeness": "Độ đầy đủ",
+    "compensation": "Hỗ trợ",
+    "documents": "Giấy tờ cần nộp",
+    "gps": "GPS trình duyệt",
+    "openPdf": "Mở gói PDF",
+    "photoMetadata": "Dữ liệu ảnh",
+    "selectedPhotos": "Ảnh đã chọn",
+    "noPhotos": "Chưa chọn ảnh.",
+    "photoType": "Loại ảnh",
+    "reportStatus": "Trạng thái hồ sơ",
+    "photosAccepted": "Ảnh được nhận",
+    "noPdf": "PDF chỉ mở được khi backend đang chạy.",
+    "demoDocuments": {
+      "request": "Đơn đề nghị hỗ trợ",
+      "damageRecord": "Biên bản thiệt hại có xác nhận UBND xã",
+      "gpsPhotos": "Ảnh chụp thiệt hại có GPS và thời gian",
+      "landCertificate": "Giấy chứng nhận quyền sử dụng đất"
+    },
+    "status": {
+      "pending_submission": "Chờ nộp",
+      "submitted": "Đã nộp"
+    },
+    "gpsSource": {
+      "browser": "GPS trình duyệt",
+      "fallback": "Vị trí demo",
+      "demo": "Vị trí demo"
+    },
+    "checklist": {
+      "gps": "GPS",
+      "photoCount": "Số lượng ảnh",
+      "photoFiles": "Định dạng và dung lượng ảnh",
+      "report": "Hồ sơ"
+    },
+    "gpsStatus": {
+      "idle": "Chưa kiểm tra",
+      "loading": "Đang lấy vị trí",
+      "ready": "Đã có vị trí",
+      "fallback": "Dùng vị trí demo",
+      "denied": "Bị từ chối quyền vị trí",
+      "unavailable": "Không hỗ trợ"
+    },
+    "photoTypes": {
+      "before": "Trước lũ",
+      "after": "Sau lũ",
+      "field": "Toàn cảnh ruộng",
+      "damage": "Cận cảnh thiệt hại"
+    },
+    "durationOptions": {
+      "<1day": "Dưới 1 ngày",
+      "2-5days": "2-5 ngày",
+      "6-10days": "6-10 ngày",
+      ">10days": "Trên 10 ngày"
+    },
+    "validation": {
+      "farmerName": "Vui lòng nhập tên nông dân.",
+      "fieldId": "Vui lòng nhập mã thửa ruộng.",
+      "area": "Diện tích phải lớn hơn 0.",
+      "lossPct": "Thiệt hại phải từ 0 đến 100%.",
+      "photoCount": "Chọn từ 2 đến 6 ảnh.",
+      "photoType": "Chỉ nhận ảnh JPEG hoặc PNG.",
+      "photoSize": "Mỗi ảnh tối đa 5MB.",
+      "gps": "GPS chưa sẵn sàng; có thể dùng vị trí demo nếu trình duyệt không cấp quyền."
+    }
+  }
+}

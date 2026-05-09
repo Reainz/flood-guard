@@ -1,0 +1,46 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e7]
+      - generic [ref=e9]: FloodGuard
+    - tablist "Điều hướng chính" [ref=e157]:
+      - tab "Lũ" [ref=e158] [cursor=pointer]
+      - tab "Thu hoạch" [selected] [ref=e159] [cursor=pointer]
+      - tab "Cảnh báo2" [ref=e160] [cursor=pointer]
+      - tab "Hồ sơ" [ref=e161] [cursor=pointer]
+    - generic [ref=e15]:
+      - button "Toggle theme" [ref=e16] [cursor=pointer]: ◑
+      - button "Toggle language" [active] [ref=e17] [cursor=pointer]: EN
+      - generic [ref=e18]: An Giang, Mekong Delta
+  - generic [ref=e123]:
+    - paragraph [ref=e124]: Đã điền điều kiện lũ từ màn hình lũ.
+    - generic [ref=e125]:
+      - generic [ref=e126]: Thông tin cây trồng & Thông tin ruộng
+      - generic [ref=e127]:
+        - generic [ref=e128]: Cây trồng
+        - generic [ref=e129]: Lúa
+      - generic [ref=e130]:
+        - generic [ref=e131]: Ngày gieo sạ
+        - textbox [ref=e132]: 2026-02-03
+      - generic [ref=e134]: Điều kiện lũ dự kiến
+      - generic [ref=e135]:
+        - generic [ref=e136]:
+          - generic [ref=e137]: Độ sâu cm
+          - generic [ref=e138]:
+            - slider [ref=e139]: "70"
+            - generic [ref=e140]: 65cm
+        - generic [ref=e141]:
+          - generic [ref=e142]: Số ngày ngập
+          - generic [ref=e143]:
+            - slider [ref=e144]: "5"
+            - generic [ref=e145]: 5d
+        - generic [ref=e146]:
+          - generic [ref=e147]: Diện tích ha
+          - spinbutton [ref=e148]: "2.4"
+      - button "Tính quyết định →" [ref=e162] [cursor=pointer]
+    - generic [ref=e151]:
+      - generic [ref=e152]: 📋
+      - generic [ref=e153]:
+        - generic [ref=e154]: Save this report
+        - generic [ref=e155]: Export your scenario analysis as PDF for loan officer or cooperative record
+      - button "Export PDF" [ref=e156] [cursor=pointer]

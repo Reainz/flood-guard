@@ -1,0 +1,277 @@
+{
+  "app": {
+    "title": "FloodGuard Vietnam",
+    "track": "Asian Hackathon for Green Future 2026",
+    "mvp": "Local MVP",
+    "navigation": "Main navigation"
+  },
+  "tabs": {
+    "dashboard": "Flood",
+    "harvest": "Harvest",
+    "alerts": "Alerts",
+    "proof": "Records"
+  },
+  "common": {
+    "loading": "Loading",
+    "loadError": "Unable to load data. Please check the backend.",
+    "staleData": "Stale data — last updated: {time}",
+    "cachedData": "Using cached data from the last successful load.",
+    "backendCached": "Backend data source is using cache.",
+    "demoData": "Backend not responding; using demo data to continue the demo.",
+    "millionVnd": "million VND",
+    "sourceFreshness": "Data source freshness",
+    "dataSources": "Data sources",
+    "required": "Required",
+    "valid": "Valid",
+    "invalid": "Invalid",
+    "ready": "Ready",
+    "notReady": "Needs update",
+    "items": "{count} items"
+  },
+  "risk": {
+    "LOW": "Low",
+    "MODERATE": "Moderate",
+    "HIGH": "High",
+    "CRITICAL": "Critical"
+  },
+  "tier": {
+    "WATCH": "Watch",
+    "WARNING": "Warning",
+    "CRITICAL": "Critical"
+  },
+  "freshness": {
+    "fresh": "Fresh",
+    "stale": "Stale",
+    "cached": "Cached",
+    "missing": "Missing",
+    "unknown": "Unknown"
+  },
+  "confidence": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High"
+  },
+  "sources": {
+    "openweather": "Rain",
+    "mrc": "River",
+    "nasa": "NASA"
+  },
+  "river": {
+    "trend": "Trend",
+    "riseRate": "Rise rate",
+    "alertLevel": "Alert level",
+    "dangerLevel": "Danger level",
+    "updated": "Station updated",
+    "status": {
+      "NORMAL": "Normal",
+      "ALERT": "Alert",
+      "DANGER": "Danger"
+    },
+    "trendValue": {
+      "rising": "Rising",
+      "falling": "Falling",
+      "steady": "Steady"
+    }
+  },
+  "dashboard": {
+    "eyebrow": "Flood monitoring",
+    "title": "Current situation",
+    "description": "Flood risk summary, river levels, and forecast rainfall for the demo field.",
+    "currentRisk": "Current risk",
+    "station": "Station",
+    "riverLevel": "River level",
+    "arrival": "Flood arrives in",
+    "depth": "Predicted depth",
+    "duration": "Flood duration",
+    "confidence": "Confidence",
+    "forecast": "Rainfall forecast",
+    "location": "Field location",
+    "locationSummary": "Demo location: An Giang, near Tan Chau station.",
+    "actionTitle": "Priority actions",
+    "actionLow": "Continue monitoring river levels and prepare basic supplies.",
+    "actionModerate": "Check embankments, pumps, and low-lying fields today.",
+    "actionHigh": "Open the Harvest screen to compare losses before the flood arrives.",
+    "actionCritical": "Prioritize harvesting or moving assets in low-lying fields immediately.",
+    "demoExplanation": "River level is at alert stage in demo data. Estimated flood arrival in 71 hours."
+  },
+  "harvest": {
+    "eyebrow": "Crop decision",
+    "title": "Harvest option comparison",
+    "description": "Enter field information and flood conditions to choose the lowest-loss option.",
+    "cropDetails": "Crop information",
+    "fieldDetails": "Field information",
+    "floodDetails": "Expected flood conditions",
+    "prefillReady": "Flood conditions pre-filled from the flood screen.",
+    "prefillLoading": "Fetching latest flood conditions.",
+    "prefillFailed": "Could not fetch latest flood conditions; using demo values.",
+    "plantingDate": "Planting date",
+    "crop": "Crop",
+    "area": "Field area (ha)",
+    "elevation": "Field elevation",
+    "daysToFlood": "Days to flood",
+    "depth": "Predicted flood depth",
+    "duration": "Flood duration (days)",
+    "submit": "Calculate decision",
+    "stage": "Growth stage",
+    "daysToHarvest": "Days to harvest",
+    "recommended": "Recommended",
+    "compensation": "Estimated support",
+    "legalBasis": "Legal basis",
+    "deadline": "Filing deadline",
+    "actionSteps": "Action steps",
+    "lastResultKept": "Could not submit new request; previous result retained below.",
+    "noActionSteps": "No additional steps.",
+    "demoGrowthStage": "Grain filling",
+    "demoLegalBasis": "Demo data based on local support framework",
+    "demoDeadline": "File within 15 days after damage confirmation",
+    "scenarioLabels": {
+      "harvest_now": "Harvest now",
+      "wait": "Wait for flood",
+      "harvest_after": "Harvest after flood"
+    },
+    "scenarioReasoning": {
+      "harvest_now": "Reduces flood risk but incurs early harvest losses.",
+      "wait": "Higher losses as crops endure flooding for several days.",
+      "harvest_after": "Buys extra ripening time but quality drops after water recedes."
+    },
+    "scenarioAction": {
+      "harvest_now": "Contact combine harvester crew and prioritize low-lying fields first."
+    },
+    "validation": {
+      "plantingDateRequired": "Please select a planting date.",
+      "plantingDateFuture": "Planting date cannot be in the future.",
+      "area": "Field area must be between 0.1 and 100 ha.",
+      "daysToFlood": "Days to flood must be between 1 and 21.",
+      "depth": "Depth must be between 10 and 200 cm.",
+      "duration": "Flood duration must be between 1 and 30 days."
+    }
+  },
+  "crops": {
+    "rice": "Rice",
+    "maize": "Maize",
+    "vegetables": "Vegetables",
+    "fruit_trees": "Fruit trees"
+  },
+  "elevation": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High"
+  },
+  "alerts": {
+    "eyebrow": "Operational alerts",
+    "title": "Alert status",
+    "description": "Monitor active alert levels and test notifications for the demo flow.",
+    "activeTier": "Alert level",
+    "station": "Station",
+    "actions": "Actions needed",
+    "reasons": "Trigger reasons",
+    "dispatch": "Send test alert",
+    "dispatchStatus": "Send status: {status}",
+    "dispatchDetail": "Detail: {detail}",
+    "dispatchFailed": "Could not send test alert. Please check the backend.",
+    "dispatchMode": "Simulates SMS if Twilio is not configured.",
+    "demoDispatchDetail": "Backend not responding; send action simulated in browser.",
+    "demo": {
+      "WATCH": {
+        "title": "Watch",
+        "message": "Monitor rainfall and river levels for the next 72 hours.",
+        "action": "Prepare sandbags, pumps, and check low-lying fields."
+      },
+      "WARNING": {
+        "title": "Flood warning",
+        "message": "Flood may arrive in 71 hours with depth around 65 cm.",
+        "action": "Open the Harvest screen and choose the lowest-loss option."
+      },
+      "CRITICAL": {
+        "title": "Critical",
+        "message": "Flood may arrive within 24 hours.",
+        "action": "Harvest low-lying fields immediately or evacuate per local guidance."
+      }
+    },
+    "status": {
+      "sent": "Sent",
+      "simulated": "Simulated"
+    }
+  },
+  "proof": {
+    "eyebrow": "Damage records",
+    "title": "Create evidence package",
+    "description": "Collect field details, GPS, and photos to create a post-flood support record.",
+    "farmerDetails": "Submitter information",
+    "damageDetails": "Damage details",
+    "evidenceDetails": "Evidence",
+    "farmerName": "Farmer name",
+    "fieldId": "Field ID",
+    "crop": "Crop",
+    "area": "Field area (ha)",
+    "lossPct": "Loss percentage",
+    "floodDuration": "Flood duration",
+    "photos": "Damage photos",
+    "submit": "Create record",
+    "photoRequirement": "Need 2 to 6 JPEG or PNG photos, max 5 MB each.",
+    "reportId": "Record ID",
+    "completeness": "Completeness",
+    "compensation": "Support",
+    "documents": "Documents required",
+    "gps": "Browser GPS",
+    "openPdf": "Open PDF package",
+    "photoMetadata": "Photo data",
+    "selectedPhotos": "Selected photos",
+    "noPhotos": "No photos selected.",
+    "photoType": "Photo type",
+    "reportStatus": "Record status",
+    "photosAccepted": "Photos accepted",
+    "noPdf": "PDF can only be opened when the backend is running.",
+    "demoDocuments": {
+      "request": "Support request form",
+      "damageRecord": "Damage record with commune committee confirmation",
+      "gpsPhotos": "Damage photos with GPS and timestamp",
+      "landCertificate": "Land use right certificate"
+    },
+    "status": {
+      "pending_submission": "Pending submission",
+      "submitted": "Submitted"
+    },
+    "gpsSource": {
+      "browser": "Browser GPS",
+      "fallback": "Demo location",
+      "demo": "Demo location"
+    },
+    "checklist": {
+      "gps": "GPS",
+      "photoCount": "Photo count",
+      "photoFiles": "Photo format and size",
+      "report": "Record"
+    },
+    "gpsStatus": {
+      "idle": "Not checked",
+      "loading": "Getting location",
+      "ready": "Location ready",
+      "fallback": "Using demo location",
+      "denied": "Location permission denied",
+      "unavailable": "Not supported"
+    },
+    "photoTypes": {
+      "before": "Before flood",
+      "after": "After flood",
+      "field": "Full field view",
+      "damage": "Close-up damage"
+    },
+    "durationOptions": {
+      "<1day": "Less than 1 day",
+      "2-5days": "2–5 days",
+      "6-10days": "6–10 days",
+      ">10days": "More than 10 days"
+    },
+    "validation": {
+      "farmerName": "Please enter the farmer name.",
+      "fieldId": "Please enter the field ID.",
+      "area": "Field area must be greater than 0.",
+      "lossPct": "Loss must be between 0 and 100%.",
+      "photoCount": "Select 2 to 6 photos.",
+      "photoType": "Only JPEG or PNG photos accepted.",
+      "photoSize": "Each photo maximum 5 MB.",
+      "gps": "GPS not ready; you may use demo location if browser permission is denied."
+    }
+  }
+}

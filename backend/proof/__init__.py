@@ -1,0 +1,1 @@
+"""Loss proof module."""
