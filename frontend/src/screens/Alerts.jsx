@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import { DataBanner, FreshnessChips, SkeletonBlock } from "../components/SharedUI.jsx";
 import { dispatchAlert, getAlertStatus } from "../services/api.js";
+import { RainfallMiniChart } from "../components/charts/RainfallMiniChart.jsx";
 
 const tierConfig = {
   WATCH:    { color: "var(--blue)",  dimColor: "var(--blue-dim)",  sevBg: "var(--blue)",  emoji: "🔵", label: "Watch" },
@@ -16,8 +17,6 @@ const cropTips = [
   { icon: "🏠", bg: "var(--blue-dim)",  color: "var(--blue)",  strong: "Safety:",               text: " Prepare emergency kit. Know evacuation route to nearest shelter (Tân Châu Community Center, 2.3 km NE)." },
 ];
 
-const rainfallHeights = [40, 55, 70, 90, 100, 65, 45];
-const rainfallLabels = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
 
 export function Alerts({ t }) {
   const [state, setState] = useState({ loading: true, payload: null, error: null });
@@ -152,22 +151,15 @@ export function Alerts({ t }) {
           </p>
           <div style={{ marginTop: 12 }}>
             <div style={{ fontSize: 11, color: "var(--text2)", marginBottom: 6 }}>7-day rainfall forecast</div>
-            <div className="rainfall-chart">
-              {rainfallHeights.map((h, i) => (
-                <div
-                  key={i}
-                  className="rainfall-bar"
-                  style={{
-                    height: `${h}%`,
-                    background: h >= 85 ? "rgba(59,130,246,0.4)" : "var(--blue-dim)",
-                    borderColor: h >= 85 ? "rgba(59,130,246,0.4)" : "rgba(59,130,246,0.2)",
-                  }}
-                />
-              ))}
-            </div>
-            <div className="rainfall-labels">
-              {rainfallLabels.map((l) => <div key={l}>{l}</div>)}
-            </div>
+            <RainfallMiniChart
+              data={[
+                { label: "T2", mm: 40 }, { label: "T3", mm: 55 },
+                { label: "T4", mm: 70 }, { label: "T5", mm: 90 },
+                { label: "T6", mm: 100 },{ label: "T7", mm: 65 },
+                { label: "CN", mm: 45 },
+              ]}
+              threshold={85}
+            />
           </div>
         </div>
       </div>
