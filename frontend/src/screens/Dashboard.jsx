@@ -1,9 +1,11 @@
 import React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, Suspense, lazy } from "react";
 
 import { DataBanner, FreshnessChips, SkeletonBlock } from "../components/SharedUI.jsx";
 import { getFloodStatus } from "../services/api.js";
 import { FloodRiskGauge } from "../components/charts/FloodRiskGauge.jsx";
+
+const LeafletMap = lazy(() => import("../components/map/LeafletMap.jsx"));
 
 const RIVER_MAX_M = 5;
 
@@ -122,26 +124,20 @@ export function Dashboard({ t }) {
         )}
       </div>
 
-      {/* Map Placeholder */}
-      <div className="card">
-        <div className="section-title">Flood risk zone — your area</div>
-        <div className="map-placeholder">
-          <div className="map-grid" />
-          <div className="map-river" />
-          <div className="map-flood-zone" />
-          <div className="map-pin" />
-          <div className="map-label" style={{ top: "28%", left: "12%", color: "rgba(239,68,68,0.7)" }}>High risk zone</div>
-          <div className="map-label" style={{ top: "38%", left: "60%", color: "var(--blue)" }}>Mekong R.</div>
-          <div className="map-label" style={{ top: "45%", left: "36%", color: "var(--green)" }}>Your field</div>
-        </div>
-        <div className="map-legend">
+      {/* Map */}
+      <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+        <Suspense fallback={<div style={{ height: 200, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)", fontSize: 12 }}>Loading map…</div>}>
+          <LeafletMap
+            lat={10.52}
+            lon={105.12}
+            riskLevel={risk}
+            stationName={data.river.station}
+          />
+        </Suspense>
+        <div className="map-legend" style={{ padding: "8px 14px" }}>
           <div className="map-legend-item">
             <div className="map-legend-sq" style={{ background: "rgba(239,68,68,0.3)" }} />
             Flood risk zone
-          </div>
-          <div className="map-legend-item">
-            <div className="map-legend-dot" style={{ background: "var(--blue)", opacity: 0.5 }} />
-            River
           </div>
           <div className="map-legend-item">
             <div className="map-legend-dot" style={{ background: "var(--green)" }} />
