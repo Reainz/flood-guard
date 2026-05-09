@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { DataBanner, FreshnessChips, SkeletonBlock } from "../components/SharedUI.jsx";
 import { getFloodStatus } from "../services/api.js";
+import { FloodRiskGauge } from "../components/charts/FloodRiskGauge.jsx";
 
 const RIVER_MAX_M = 5;
 
@@ -75,10 +76,16 @@ export function Dashboard({ t }) {
         <span className={riskChipClass(risk)}>{t(`risk.${risk}`)}</span>
       </div>
 
-      {/* Countdown Timer */}
-      <div className="card">
-        <div className="section-title">{t("dashboard.arrival")}</div>
-        <Countdown hours={data.prediction.hours_to_arrival} />
+      {/* Countdown + Gauge */}
+      <div className="card" style={{ display: "flex", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
+        <div style={{ flex: 1 }}>
+          <div className="section-title">{t("dashboard.arrival")}</div>
+          <Countdown hours={data.prediction.hours_to_arrival} />
+        </div>
+        <FloodRiskGauge
+          riskLevel={risk}
+          pct={{ LOW: 18, MODERATE: 50, HIGH: 78, CRITICAL: 96 }[risk] ?? 50}
+        />
       </div>
 
       {/* River Level Monitoring */}
