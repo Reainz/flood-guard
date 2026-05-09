@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { DataBanner, FormField } from "../components/SharedUI.jsx";
 import { getFloodStatus, postHarvestDecision } from "../services/api.js";
 import { LossBarChart } from "../components/charts/LossBarChart.jsx";
+import { CropStageTimeline } from "../components/charts/CropStageTimeline.jsx";
 
 const initialForm = {
   planting_date: "2026-02-03",
@@ -275,6 +276,13 @@ function HarvestResult({ data, t }) {
             </div>
             <div className="stat-label">{data.compensation.legal_basis || t("harvest.demoLegalBasis")}</div>
           </div>
+        </div>
+        <div style={{ marginTop: 12 }}>
+          <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 6 }}>Growth stage progress</div>
+          <CropStageTimeline
+            currentStage={data.growth_stage || "grain_filling"}
+            stages={["seedling", "tillering", "panicle_initiation", "booting", "heading", "grain_filling", "maturity"]}
+          />
         </div>
       </div>
 
