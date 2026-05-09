@@ -964,3 +964,33 @@ select:focus, input:focus { border-color: var(--green); }
   .nav-tab { padding: 5px 8px; font-size: 11px; }
   .nav-logo-name { display: none; }
 }
+
+/* ── ALERT PULSE ── */
+@keyframes fg-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.5); }
+  50%       { box-shadow: 0 0 0 14px rgba(220, 38, 38, 0); }
+}
+
+.alert-icon-pulse {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.alert-icon-pulse.critical {
+  animation: fg-pulse 1.8s ease-in-out infinite;
+  background: rgba(220, 38, 38, 0.12);
+}
+
+.alert-icon-pulse.warning {
+  background: rgba(217, 119, 6, 0.12);
+}
+
+.alert-icon-pulse.watch {
+  background: rgba(37, 99, 235, 0.12);
+}

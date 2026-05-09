@@ -69,7 +69,7 @@ export function Alerts({ t }) {
       <div className="alert-card">
         <div className="alert-sev-bar" style={{ background: cfg.sevBg }} />
         <div className="alert-card-header">
-          <div style={{ fontSize: 22 }}>{cfg.emoji}</div>
+          <div className={`alert-icon-pulse ${tier.toLowerCase()}`}>{cfg.emoji}</div>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 14, fontWeight: 700 }}>{alertTitle}</div>
             <div style={{ fontSize: 11, color: "var(--text2)", marginTop: 2 }}>
