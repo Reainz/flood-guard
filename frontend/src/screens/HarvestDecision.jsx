@@ -35,6 +35,7 @@ export function HarvestDecision({ t }) {
   const [errors, setErrors] = useState({});
   const [state, setState] = useState({ loading: false, payload: null, error: null });
   const [prefillState, setPrefillState] = useState({ loading: true, fromCache: false, updatedAt: null, error: false });
+  const plantingDateRef = React.useRef(null);
 
   useEffect(() => {
     let mounted = true;
@@ -60,6 +61,20 @@ export function HarvestDecision({ t }) {
   function update(name, value) {
     setForm((current) => ({ ...current, [name]: value }));
     setErrors((current) => { const next = { ...current }; delete next[name]; return next; });
+  }
+
+  function openPlantingDatePicker() {
+    const input = plantingDateRef.current;
+    if (!input) return;
+
+    input.focus({ preventScroll: true });
+    if (typeof input.showPicker !== "function") return;
+
+    try {
+      input.showPicker();
+    } catch {
+      // Browsers can reject showPicker() outside trusted pointer/keyboard events.
+    }
   }
 
   async function submit(event) {
@@ -106,17 +121,29 @@ export function HarvestDecision({ t }) {
         <div className="section-title">{t("harvest.cropDetails")} &amp; {t("harvest.fieldDetails")}</div>
 
         <div className="field-row">
-          <label>{t("harvest.crop")}</label>
-          <div style={{ padding: "9px 12px", background: "var(--surface2)", border: "1px solid var(--border2)", borderRadius: 8, fontSize: 13, color: "var(--text)" }}>
-            {t("crops.rice")}
-          </div>
+          <label htmlFor="harvest-crop">{t("harvest.crop")}</label>
+          <select
+            id="harvest-crop"
+            value={form.crop_type}
+            onChange={(e) => update("crop_type", e.target.value)}
+          >
+            <option value="rice">{t("crops.rice")}</option>
+            <option value="vegetables">{t("crops.vegetable")}</option>
+            <option value="fruit_trees">{t("crops.others")}</option>
+          </select>
         </div>
 
         <div className="field-row">
-          <label>{t("harvest.plantingDate")}</label>
+          <label htmlFor="harvest-planting-date" onClick={openPlantingDatePicker}>
+            {t("harvest.plantingDate")}
+          </label>
           <input
+            id="harvest-planting-date"
+            ref={plantingDateRef}
+            className="date-picker-input"
             type="date"
             value={form.planting_date}
+            onClick={openPlantingDatePicker}
             onChange={(e) => update("planting_date", e.target.value)}
           />
           {errors.planting_date && <small className="field-error">{errors.planting_date}</small>}

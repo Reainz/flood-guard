@@ -106,7 +106,7 @@
     "prefillLoading": "Đang lấy điều kiện lũ mới nhất.",
     "prefillFailed": "Không lấy được điều kiện lũ mới nhất; đang dùng giá trị demo.",
     "plantingDate": "Ngày gieo sạ",
-    "crop": "Kích thước cây (cm)",
+    "crop": "Cây trồng",
     "area": "Diện tích ha",
     "elevation": "Độ cao ruộng",
     "daysToFlood": "Số ngày trước lũ",
@@ -158,8 +158,10 @@
   "crops": {
     "rice": "Lúa",
     "maize": "Bắp",
+    "vegetable": "Rau màu",
     "vegetables": "Rau màu",
-    "fruit_trees": "Cây ăn trái"
+    "fruit_trees": "Cây ăn trái",
+    "others": "Khác"
   },
   "elevation": {
     "low": "Thấp",

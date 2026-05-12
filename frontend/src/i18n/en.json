@@ -106,7 +106,7 @@
     "prefillLoading": "Fetching latest flood conditions.",
     "prefillFailed": "Could not fetch latest flood conditions; using demo values.",
     "plantingDate": "Planting date",
-    "crop": "Crop Size (cm)",
+    "crop": "Crop",
     "area": "Field area (ha)",
     "elevation": "Field elevation",
     "daysToFlood": "Days to flood",
@@ -158,8 +158,10 @@
   "crops": {
     "rice": "Rice",
     "maize": "Maize",
+    "vegetable": "Vegetable",
     "vegetables": "Vegetables",
-    "fruit_trees": "Fruit trees"
+    "fruit_trees": "Fruit trees",
+    "others": "Others"
   },
   "elevation": {
     "low": "Low",
