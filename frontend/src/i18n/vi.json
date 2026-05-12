@@ -90,6 +90,7 @@
     "fieldAreaLabel": "Diện tích ruộng",
     "registeredField": "Ruộng đã đăng ký",
     "predictedDepthLabel": "Độ sâu dự kiến",
+    "depthStatFootnote": "Ước tính theo dự báo",
     "riskLevelLabel": "Mức rủi ro",
     "floodRiskGauge": "Rủi ro lũ",
     "mapLoading": "Đang tải bản đồ"
@@ -302,7 +303,17 @@
     "evidenceIncomplete": "Thêm ảnh để tăng cường hồ sơ. Nhiều bằng chứng = tỷ lệ duyệt cao hơn.",
     "estCompensation": "Ước tính hỗ trợ nhà nước",
     "processingTime": "Mã yêu cầu được tạo khi nộp · Thời gian xử lý 15–30 ngày",
-    "photoEvidence": "Bằng chứng ảnh - trước và sau lũ",
+    "photoEvidence": "Thêm ảnh thiệt hại",
+    "photoInstruction": "Nhấn vào từng ô để chụp hoặc tải ảnh lên. Ảnh trước lũ và sau lũ là bắt buộc.",
+    "changePhoto": "Đổi ảnh",
+    "requiredBadge": "Bắt buộc",
+    "optionalBadge": "Tùy chọn",
+    "slotHints": {
+      "before": "Ruộng của bạn trước khi ngập lũ",
+      "after": "Ruộng của bạn sau khi ngập lũ",
+      "crop": "Cận cảnh cây trồng bị thiệt hại",
+      "water": "Mực nước — dùng cọc hoặc người để ước lượng"
+    },
     "cropOptions": {
       "riceWinter": "Lúa Đông Xuân, giai đoạn vào chắc"
     },

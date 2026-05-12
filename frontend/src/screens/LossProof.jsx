@@ -1,6 +1,6 @@
 import React from "react";
-import { useEffect, useMemo, useState } from "react";
-import { Check, ClipboardCheck, ImagePlus, MapPin, Waves, Wheat } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Camera, Check, ClipboardCheck } from "lucide-react";
 
 import { ChecklistItem, DataBanner, ScreenHeader } from "../components/SharedUI.jsx";
 import { EvidenceDonut } from "../components/charts/EvidenceDonut.jsx";
@@ -8,7 +8,13 @@ import { apiUrl, postLossReport } from "../services/api.js";
 
 const maxPhotoBytes = 5 * 1024 * 1024;
 const acceptedPhotoTypes = ["image/jpeg", "image/png"];
-const photoTypeOptions = ["before", "after", "field", "damage"];
+
+const PHOTO_SLOTS = [
+  { key: "before", labelKey: "proof.beforeFlood",     hintKey: "proof.slotHints.before", required: true  },
+  { key: "after",  labelKey: "proof.afterFlood",      hintKey: "proof.slotHints.after",  required: true  },
+  { key: "crop",   labelKey: "proof.cropCloseup",     hintKey: "proof.slotHints.crop",   required: false },
+  { key: "water",  labelKey: "proof.waterDepthPhoto", hintKey: "proof.slotHints.water",  required: false },
+];
 
 const RATE_HIGH = 4600000;
 const RATE_MID  = 2000000;
@@ -31,13 +37,17 @@ function computeComp(area, loss) {
 
 export function LossProof({ t }) {
   const [form, setForm] = useState(initialForm);
-  const [photos, setPhotos] = useState([]);
-  const [photoTypes, setPhotoTypes] = useState({});
-  const [hasCropPhoto, setHasCropPhoto] = useState(false);
-  const [hasWaterPhoto, setHasWaterPhoto] = useState(false);
+  const [slotFiles, setSlotFiles] = useState({ before: null, after: null, crop: null, water: null });
+  const [slotPreviews, setSlotPreviews] = useState({ before: null, after: null, crop: null, water: null });
   const [gpsStatus, setGpsStatus] = useState("idle");
   const [errors, setErrors] = useState({});
   const [state, setState] = useState({ loading: false, payload: null, error: null });
+
+  const refBefore = useRef(null);
+  const refAfter  = useRef(null);
+  const refCrop   = useRef(null);
+  const refWater  = useRef(null);
+  const slotRefs  = { before: refBefore, after: refAfter, crop: refCrop, water: refWater };
 
   useEffect(() => {
     if (!navigator.geolocation) { setGpsStatus("unavailable"); return; }
@@ -54,6 +64,16 @@ export function LossProof({ t }) {
     );
   }, []);
 
+  useEffect(() => {
+    const previews = slotPreviews;
+    return () => { Object.values(previews).forEach(url => { if (url) URL.revokeObjectURL(url); }); };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const photos = useMemo(
+    () => PHOTO_SLOTS.map(s => slotFiles[s.key]).filter(Boolean),
+    [slotFiles],
+  );
+
   const photoStatus = useMemo(() => ({
     invalidType: photos.filter((p) => !acceptedPhotoTypes.includes(p.type)),
     tooLarge: photos.filter((p) => p.size > maxPhotoBytes),
@@ -68,22 +88,32 @@ export function LossProof({ t }) {
 
   const data = state.payload?.data;
 
-  const totalPhotos = 2 + (hasCropPhoto ? 1 : 0) + (hasWaterPhoto ? 1 : 0);
-  const photoScore = Math.min(50, totalPhotos * 25);
+  const photoScore = Math.min(50, photos.length * 25);
   const fieldScore = form.farmer_name.trim() ? 32 : 20;
   const proofPct = Math.min(100, photoScore + fieldScore);
   const comp = computeComp(form.area_ha, form.loss_pct);
 
+  function setSlotFile(key, file) {
+    if (!file) {
+      setSlotFiles(c => ({ ...c, [key]: null }));
+      setSlotPreviews(c => {
+        if (c[key]) URL.revokeObjectURL(c[key]);
+        return { ...c, [key]: null };
+      });
+      return;
+    }
+    const preview = URL.createObjectURL(file);
+    setSlotFiles(c => ({ ...c, [key]: file }));
+    setSlotPreviews(c => {
+      if (c[key]) URL.revokeObjectURL(c[key]);
+      return { ...c, [key]: preview };
+    });
+    setErrors(c => { const n = { ...c }; delete n.photos; return n; });
+  }
+
   function update(name, value) {
     setForm((c) => ({ ...c, [name]: value }));
     setErrors((c) => { const n = { ...c }; delete n[name]; return n; });
-  }
-
-  function updatePhotos(fileList) {
-    const next = Array.from(fileList);
-    setPhotos(next);
-    setPhotoTypes(Object.fromEntries(next.map((p, i) => [p.name, photoTypeOptions[i] || "damage"])));
-    setErrors((c) => { const n = { ...c }; delete n.photos; return n; });
   }
 
   async function submit(event) {
@@ -128,69 +158,71 @@ export function LossProof({ t }) {
         </div>
       </div>
 
-      {/* Photo evidence grid */}
+      {/* Photo evidence card */}
       <div className="card">
         <div className="section-title">{t("proof.photoEvidence")}</div>
+        <p style={{ fontSize: 12, color: "var(--text2)", marginTop: -4, marginBottom: 14, lineHeight: 1.6 }}>
+          {t("proof.photoInstruction")}
+        </p>
         <div className="photo-grid">
-          {/* Before flood (pre-filled demo) */}
-          <div className="photo-filled">
-            <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg,#1a2a1a,#2a3a2a)", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 4 }}>
-              <Wheat size={30} color="rgba(255,255,255,0.78)" aria-hidden="true" />
-              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.5)" }}>{t("proof.beforeFlood")}</div>
-            </div>
-            <div className="photo-filled-overlay"><MapPin size={11} aria-hidden="true" /> 10.4512N, 105.2341E · 02/05 06:14</div>
-          </div>
-          {/* After flood (pre-filled demo) */}
-          <div className="photo-filled">
-            <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg,#0d1a2a,#1a2a3a)", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 4 }}>
-              <Waves size={30} color="rgba(255,255,255,0.78)" aria-hidden="true" />
-              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.5)" }}>{t("proof.afterFlood")}</div>
-            </div>
-            <div className="photo-filled-overlay"><MapPin size={11} aria-hidden="true" /> 10.4512N, 105.2341E · 05/05 09:31</div>
-          </div>
-          {/* Extra photo slots — independent state */}
-          {!hasCropPhoto && (
-            <div
-              className="photo-slot"
-              role="button"
-              tabIndex={0}
-              onClick={() => setHasCropPhoto(true)}
-              onKeyDown={(e) => e.key === "Enter" && setHasCropPhoto(true)}
-            >
-              <ImagePlus size={22} aria-hidden="true" />
-              <span>{t("proof.cropCloseup")}</span>
-            </div>
-          )}
-          {!hasWaterPhoto && (
-            <div
-              className="photo-slot"
-              role="button"
-              tabIndex={0}
-              onClick={() => setHasWaterPhoto(true)}
-              onKeyDown={(e) => e.key === "Enter" && setHasWaterPhoto(true)}
-            >
-              <ImagePlus size={22} aria-hidden="true" />
-              <span>{t("proof.waterDepthPhoto")}</span>
-            </div>
-          )}
-          {hasCropPhoto && (
-            <div className="photo-filled">
-              <div style={{ width: "100%", height: "100%", background: "var(--surface3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Check size={30} color="var(--green)" aria-hidden="true" />
+          {PHOTO_SLOTS.map(({ key, labelKey, hintKey, required }) => {
+            const preview = slotPreviews[key];
+            const inputRef = slotRefs[key];
+            return (
+              <div key={key} className="photo-upload-slot">
+                <input
+                  ref={inputRef}
+                  type="file"
+                  accept="image/jpeg,image/png"
+                  capture="environment"
+                  style={{ display: "none" }}
+                  onChange={(e) => { if (e.target.files[0]) setSlotFile(key, e.target.files[0]); e.target.value = ""; }}
+                />
+                {preview ? (
+                  <div
+                    className="photo-upload-filled"
+                    onClick={() => inputRef.current?.click()}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => e.key === "Enter" && inputRef.current?.click()}
+                    aria-label={t(labelKey)}
+                  >
+                    <img src={preview} alt={t(labelKey)} className="photo-upload-img" />
+                    <div className="photo-upload-check-badge">
+                      <Check size={11} color="white" aria-hidden="true" />
+                    </div>
+                    <div className="photo-upload-overlay">
+                      <span className="photo-upload-overlay-label">{t(labelKey)}</span>
+                      <button
+                        type="button"
+                        className="photo-upload-change-btn"
+                        onClick={(e) => { e.stopPropagation(); inputRef.current?.click(); }}
+                      >
+                        {t("proof.changePhoto")}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className={`photo-upload-empty${required ? " slot-required" : ""}`}
+                    onClick={() => inputRef.current?.click()}
+                    aria-label={`${t(labelKey)} — ${required ? t("proof.requiredBadge") : t("proof.optionalBadge")}`}
+                  >
+                    <Camera size={22} aria-hidden="true" />
+                    <span className="photo-upload-label">{t(labelKey)}</span>
+                    <span className="photo-upload-hint">{t(hintKey)}</span>
+                    <span className={`photo-badge ${required ? "photo-badge-required" : "photo-badge-optional"}`}>
+                      {required ? t("proof.requiredBadge") : t("proof.optionalBadge")}
+                    </span>
+                  </button>
+                )}
               </div>
-              <div className="photo-filled-overlay" style={{ color: "var(--green)" }}>{t("proof.cropCloseup")}</div>
-            </div>
-          )}
-          {hasWaterPhoto && (
-            <div className="photo-filled">
-              <div style={{ width: "100%", height: "100%", background: "var(--surface3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Check size={30} color="var(--green)" aria-hidden="true" />
-              </div>
-              <div className="photo-filled-overlay" style={{ color: "var(--green)" }}>{t("proof.waterDepthPhoto")}</div>
-            </div>
-          )}
+            );
+          })}
         </div>
-        <div style={{ fontSize: 11, color: "var(--text3)" }}>
+        {errors.photos && <small className="field-error" style={{ display: "block", marginBottom: 6 }}>{errors.photos}</small>}
+        <div style={{ fontSize: 11, color: "var(--text3)", marginTop: 4 }}>
           {t("proof.photoGpsNote")}
         </div>
       </div>
@@ -262,20 +294,7 @@ export function LossProof({ t }) {
             </select>
           </div>
 
-          {/* File upload for real submission */}
-          <div className="field-row" style={{ marginTop: 8 }}>
-            <label>{t("proof.photos")}</label>
-            <input
-              type="file"
-              accept="image/jpeg,image/png"
-              capture="environment"
-              multiple
-              onChange={(e) => updatePhotos(e.target.files)}
-            />
-            <small style={{ color: "var(--text3)", fontSize: 11 }}>{t("proof.photoRequirement")}</small>
-            {errors.photos && <small className="field-error">{errors.photos}</small>}
-            {errors.gps && <small className="field-error">{errors.gps}</small>}
-          </div>
+          {errors.gps && <small className="field-error">{errors.gps}</small>}
         </div>
 
         {/* Proof score */}
@@ -335,36 +354,6 @@ export function LossProof({ t }) {
           <ChecklistItem done={checklist.reportReady} label={t("proof.checklist.report")} detail={data ? data.report_id : t("common.notReady")} />
         </div>
       </div>
-
-      {/* Photo list (uploaded files) */}
-      {photos.length > 0 && (
-        <div className="card">
-          <div className="section-title">{t("proof.selectedPhotos")} · {t("common.items", { count: photos.length })}</div>
-          <div className="photo-list">
-            {photos.map((photo) => {
-              const validType = acceptedPhotoTypes.includes(photo.type);
-              const validSize = photo.size <= maxPhotoBytes;
-              return (
-                <div className="photo-row" key={`${photo.name}-${photo.lastModified}`}>
-                  <div>
-                    <strong>{photo.name}</strong>
-                    <small>{formatBytes(photo.size)} · {validType && validSize ? t("common.valid") : t("common.invalid")}</small>
-                  </div>
-                  <select
-                    value={photoTypes[photo.name] || "damage"}
-                    onChange={(e) => setPhotoTypes((c) => ({ ...c, [photo.name]: e.target.value }))}
-                    aria-label={t("proof.photoType")}
-                  >
-                    {photoTypeOptions.map((type) => (
-                      <option value={type} key={type}>{t(`proof.photoTypes.${type}`)}</option>
-                    ))}
-                  </select>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
 
       {data && <ProofResult data={data} t={t} />}
     </div>

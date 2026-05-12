@@ -153,27 +153,48 @@ export function Dashboard({ t }) {
         <div className="stat-grid">
           <div className="stat-card">
             <div className="stat-label">{t("dashboard.cropTypeLabel")}</div>
-            <div className="stat-num" style={{ fontSize: 16, color: "var(--green)" }}>{t("crops.rice")}</div>
-            <div className="stat-label">{t("dashboard.registeredField")}</div>
+            <div className="stat-value-slot">
+              <div className="stat-num" style={{ color: "var(--green)" }}>
+                {t("crops.rice")}
+              </div>
+            </div>
+            <div className="stat-footer">{t("dashboard.registeredField")}</div>
           </div>
           <div className="stat-card">
             <div className="stat-label">{t("dashboard.fieldAreaLabel")}</div>
-            <div className="stat-num">2.4 <span style={{ fontSize: 14, fontWeight: 500 }}>ha</span></div>
-            <div className="stat-label">{t("dashboard.registeredField")}</div>
+            <div className="stat-value-slot">
+              <div className="stat-num">
+                2.4
+                <span className="stat-unit">ha</span>
+              </div>
+            </div>
+            <div className="stat-footer">{t("dashboard.registeredField")}</div>
           </div>
           <div className="stat-card">
-            <div className="stat-label">{t("dashboard.depth")}</div>
-            <div className="stat-num" style={{ color: "var(--amber)" }}>
-              {Math.round(data.prediction.predicted_depth_cm)} <span style={{ fontSize: 14, fontWeight: 500 }}>cm</span>
-            </div>
             <div className="stat-label">{t("dashboard.predictedDepthLabel")}</div>
+            <div className="stat-value-slot">
+              <div className="stat-num" style={{ color: "var(--amber)" }}>
+                {Math.round(data.prediction.predicted_depth_cm)}
+                <span className="stat-unit">cm</span>
+              </div>
+            </div>
+            <div className="stat-footer">{t("dashboard.depthStatFootnote")}</div>
           </div>
           <div className="stat-card">
             <div className="stat-label">{t("dashboard.riskLevelLabel")}</div>
-            <div className="stat-num" style={{ fontSize: 16, color: risk === "LOW" ? "var(--green)" : risk === "MODERATE" ? "var(--amber)" : "var(--red)" }}>
-              {t(`risk.${risk}`)}
+            <div className="stat-value-slot">
+              <div
+                className="stat-num"
+                style={{
+                  color: risk === "LOW" ? "var(--green)" : risk === "MODERATE" ? "var(--amber)" : "var(--red)",
+                }}
+              >
+                {t(`risk.${risk}`)}
+              </div>
             </div>
-            <div className="stat-label">{t("river.updated")}: {formatDateTime(data.river.updated)}</div>
+            <div className="stat-footer">
+              {t("river.updated")}: {formatDateTime(data.river.updated)}
+            </div>
           </div>
         </div>
       </div>

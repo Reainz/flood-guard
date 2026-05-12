@@ -90,6 +90,7 @@
     "fieldAreaLabel": "Field area",
     "registeredField": "Registered field",
     "predictedDepthLabel": "Predicted depth",
+    "depthStatFootnote": "Forecast-based estimate",
     "riskLevelLabel": "Risk level",
     "floodRiskGauge": "Flood Risk",
     "mapLoading": "Loading map"
@@ -302,7 +303,17 @@
     "evidenceIncomplete": "Add photos to strengthen your claim. More evidence = higher approval rate.",
     "estCompensation": "Estimated government compensation",
     "processingTime": "Claim reference generated on submission · Processing 15–30 days",
-    "photoEvidence": "Photo evidence - before and after flood",
+    "photoEvidence": "Add damage photos",
+    "photoInstruction": "Tap each box to take or upload a photo. Before flood and After flood are required.",
+    "changePhoto": "Change",
+    "requiredBadge": "Required",
+    "optionalBadge": "Optional",
+    "slotHints": {
+      "before": "Your field before flooding",
+      "after": "Your field after flooding",
+      "crop": "Close-up of damaged crops",
+      "water": "Water level — use a stick or person for scale"
+    },
     "cropOptions": {
       "riceWinter": "Rice (Winter-Spring crop, grain-filling stage)"
     },

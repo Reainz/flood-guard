@@ -500,7 +500,12 @@ select:focus-visible {
 .map-legend-sq { width: 10px; height: 10px; border-radius: 2px; }
 
 /* ── STAT GRID ── */
-.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: stretch;
+}
 .stat-card {
   background: var(--surface2);
   border: 1px solid var(--border);
@@ -508,9 +513,45 @@ select:focus-visible {
   padding: 16px;
   transition: transform 0.18s, box-shadow 0.18s;
 }
+.stat-grid .stat-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 6px;
+}
 .stat-card:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(15,23,42,0.06); }
-.stat-num { font-size: 24px; font-weight: 800; margin: 6px 0 2px; letter-spacing: -0.4px; line-height: 1.15; }
-.stat-label { font-size: 12px; color: var(--text2); font-weight: 500; }
+.stat-value-slot {
+  display: block;
+}
+.stat-card > .stat-num {
+  margin: 6px 0 2px;
+}
+.stat-num {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--text);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.1em;
+}
+.stat-num .stat-unit {
+  font-size: 0.58em;
+  font-weight: 700;
+  letter-spacing: 0;
+  opacity: 0.88;
+}
+.stat-label { font-size: 12px; color: var(--text2); font-weight: 500; line-height: 1.3; }
+.stat-footer {
+  font-size: 12px;
+  color: var(--text2);
+  font-weight: 500;
+  line-height: 1.35;
+}
 
 /* ── SCENARIO GRID (Harvest Decision) ── */
 .scenario-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 14px 0; }
@@ -663,6 +704,126 @@ select:focus-visible {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+/* ── PHOTO UPLOAD SLOTS (per-slot upload, farmer UX) ── */
+.photo-upload-slot {
+  aspect-ratio: 4/3;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+}
+.photo-upload-empty {
+  width: 100%;
+  height: 100%;
+  border: 2px dashed var(--border2);
+  border-radius: 14px;
+  background: var(--surface2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 10px 8px;
+  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.18s;
+  text-align: center;
+  color: var(--text2);
+}
+.photo-upload-empty:hover,
+.photo-upload-empty:focus-visible {
+  border-color: var(--green);
+  background: var(--green-dim);
+  color: var(--green-dark);
+  transform: translateY(-2px);
+  outline: none;
+}
+.photo-upload-empty.slot-required {
+  border-color: rgba(217, 119, 6, 0.4);
+}
+.photo-upload-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+  margin-top: 2px;
+}
+.photo-upload-hint {
+  font-size: 10px;
+  color: var(--text3);
+  line-height: 1.3;
+}
+.photo-badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 99px;
+  margin-top: 3px;
+}
+.photo-badge-required {
+  background: var(--amber-dim);
+  color: var(--amber);
+}
+.photo-badge-optional {
+  background: rgba(100, 116, 139, 0.12);
+  color: var(--text3);
+}
+.photo-upload-filled {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+  display: block;
+}
+.photo-upload-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.photo-upload-check-badge {
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+}
+.photo-upload-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.72));
+  padding: 8px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 4px;
+}
+.photo-upload-overlay-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: white;
+  font-family: var(--mono);
+}
+.photo-upload-change-btn {
+  font-size: 10px;
+  background: rgba(255,255,255,0.18);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.38);
+  border-radius: 6px;
+  padding: 2px 7px;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.photo-upload-change-btn:hover {
+  background: rgba(255,255,255,0.32);
 }
 
 /* ── DAMAGE SLIDERS ── */
@@ -1303,9 +1464,10 @@ select:focus, input:focus {
 
 /* ── FLOOD RISK GAUGE WRAPPER ── */
 .flood-risk-gauge-wrap {
-  width: 280px;
+  width: clamp(260px, 31vw, 320px);
   max-width: 100%;
   flex-shrink: 0;
+  justify-self: center;
 }
 .flood-risk-gauge-wrap svg {
   display: block;
@@ -1316,11 +1478,12 @@ select:focus, input:focus {
 /* Container card for countdown + gauge */
 .flood-summary-card {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 18px;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.85fr);
+  gap: clamp(28px, 6vw, 64px);
   align-items: center;
 }
-@media (max-width: 640px) {
+
+@media (max-width: 760px) {
   .flood-summary-card {
     grid-template-columns: 1fr;
     gap: 20px;
