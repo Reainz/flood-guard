@@ -29,7 +29,7 @@ async function requestJson(endpoint, options = {}, fallbackFactory = null) {
       return {
         data: fallbackFactory(),
         updatedAt: new Date().toISOString(),
-        fromCache: true,
+        fromCache: false,
         demo: true,
         error,
       };

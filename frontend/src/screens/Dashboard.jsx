@@ -71,12 +71,12 @@ export function Dashboard({ t }) {
                   style={{ width: `${Math.min(100, Math.round(data.prediction.predicted_depth_cm / 1.5))}%` }}
                 />
               </div>
-              <div className="depth-meter-scale">
-                <span>0 cm</span>
-                <strong style={{ color: "var(--blue)", fontWeight: 700 }}>
+              <div className="depth-meter-scale" style={{ position: "relative", height: "16px", display: "block" }}>
+                <span style={{ position: "absolute", left: 0 }}>0 cm</span>
+                <strong style={{ position: "absolute", left: `${Math.min(100, Math.round(data.prediction.predicted_depth_cm / 1.5))}%`, transform: "translateX(-50%)", color: "var(--blue)", fontWeight: 700 }}>
                   {Math.round(data.prediction.predicted_depth_cm)} cm
                 </strong>
-                <span>150 cm</span>
+                <span style={{ position: "absolute", right: 0 }}>150 cm</span>
               </div>
             </div>
           </div>
@@ -105,10 +105,10 @@ export function Dashboard({ t }) {
               style={{ width: `${riverPct}%` }}
             />
           </div>
-          <div className="river-scale">
-            <span>0 m</span>
-            <span>{t("river.alertLevel")} {data.river.alert_level_m} m</span>
-            <span>{RIVER_MAX_M} m</span>
+          <div className="river-scale" style={{ position: "relative", height: "16px", display: "block" }}>
+            <span style={{ position: "absolute", left: 0 }}>0 m</span>
+            <span style={{ position: "absolute", left: `${(data.river.alert_level_m / RIVER_MAX_M) * 100}%`, transform: "translateX(-50%)" }}>{t("river.alertLevel")} {data.river.alert_level_m} m</span>
+            <span style={{ position: "absolute", right: 0 }}>{RIVER_MAX_M} m</span>
           </div>
         </div>
         {data.river.rise_rate_cm_per_hr > 0 && (

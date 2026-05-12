@@ -46,9 +46,10 @@ export function Alerts({ t }) {
   const tier = data.tier || "WARNING";
   const cfg = tierConfig[tier] || tierConfig.WARNING;
   const TierIcon = cfg.icon;
-  const alertTitle = data.title || t(`alerts.demo.${tier}.title`);
-  const alertMessage = data.message || t(`alerts.demo.${tier}.message`);
-  const alertAction = data.action_required || t(`alerts.demo.${tier}.action`);
+  // Always use localized keys for the UI, ignoring backend SMS strings
+  const alertTitle = t(`alerts.demo.${tier}.title`);
+  const alertMessage = t(`alerts.demo.${tier}.message`);
+  const alertAction = t(`alerts.demo.${tier}.action`);
   const rainfallTier = data.rainfall_tier || "WATCH";
   const rainfallCfg = rainfallTier === "WARNING" ? tierConfig.WARNING : tierConfig.WATCH;
   const rainfallSeries =
