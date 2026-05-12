@@ -1,7 +1,8 @@
 import React from "react";
 import { useEffect, useMemo, useState } from "react";
+import { Check, ClipboardCheck, ImagePlus, MapPin, Waves, Wheat } from "lucide-react";
 
-import { ChecklistItem, DataBanner, FormField } from "../components/SharedUI.jsx";
+import { ChecklistItem, DataBanner, ScreenHeader } from "../components/SharedUI.jsx";
 import { EvidenceDonut } from "../components/charts/EvidenceDonut.jsx";
 import { apiUrl, postLossReport } from "../services/api.js";
 
@@ -32,7 +33,8 @@ export function LossProof({ t }) {
   const [form, setForm] = useState(initialForm);
   const [photos, setPhotos] = useState([]);
   const [photoTypes, setPhotoTypes] = useState({});
-  const [extraPhotos, setExtraPhotos] = useState(0);
+  const [hasCropPhoto, setHasCropPhoto] = useState(false);
+  const [hasWaterPhoto, setHasWaterPhoto] = useState(false);
   const [gpsStatus, setGpsStatus] = useState("idle");
   const [errors, setErrors] = useState({});
   const [state, setState] = useState({ loading: false, payload: null, error: null });
@@ -43,6 +45,8 @@ export function LossProof({ t }) {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setForm((c) => ({ ...c, lat: Number(pos.coords.latitude.toFixed(6)), lon: Number(pos.coords.longitude.toFixed(6)) }));
+        localStorage.setItem("fg_field_lat", pos.coords.latitude.toFixed(6));
+        localStorage.setItem("fg_field_lon", pos.coords.longitude.toFixed(6));
         setGpsStatus("ready");
       },
       (err) => setGpsStatus(err.code === 1 ? "denied" : "fallback"),
@@ -64,7 +68,7 @@ export function LossProof({ t }) {
 
   const data = state.payload?.data;
 
-  const totalPhotos = 2 + extraPhotos;
+  const totalPhotos = 2 + (hasCropPhoto ? 1 : 0) + (hasWaterPhoto ? 1 : 0);
   const photoScore = Math.min(50, totalPhotos * 25);
   const fieldScore = form.farmer_name.trim() ? 32 : 20;
   const proofPct = Math.min(100, photoScore + fieldScore);
@@ -101,6 +105,12 @@ export function LossProof({ t }) {
 
   return (
     <div className="screen-stack">
+      <ScreenHeader
+        eyebrow={t("proof.eyebrow")}
+        title={t("proof.title")}
+        description={t("proof.description")}
+      />
+
       {state.payload?.fromCache && <DataBanner>{t("common.staleData", { time: formatDateTime(state.payload.updatedAt) })}</DataBanner>}
       {state.payload?.demo && <DataBanner tone="info">{t("common.demoData")}</DataBanner>}
       {state.error && <DataBanner tone="error">{t("common.loadError")}</DataBanner>}
@@ -108,11 +118,11 @@ export function LossProof({ t }) {
       {/* Legal context */}
       <div className="card" style={{ borderColor: "rgba(59,130,246,0.25)", background: "rgba(59,130,246,0.04)" }}>
         <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-          <div style={{ fontSize: 22 }}>📋</div>
+          <div className="inline-icon blue"><ClipboardCheck size={20} aria-hidden="true" /></div>
           <div>
-            <div style={{ fontSize: 14, fontWeight: 700, color: "var(--blue)" }}>Loss documentation report</div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "var(--blue)" }}>{t("proof.lossDocTitle")}</div>
             <div style={{ fontSize: 12, color: "var(--text2)", marginTop: 3, lineHeight: 1.5 }}>
-              Under Nghị định 02/2017/NĐ-CP, documented evidence is required to claim government agricultural disaster support. This report generates your official evidence package.
+              {t("proof.lossDocDesc")}
             </div>
           </div>
         </div>
@@ -120,75 +130,75 @@ export function LossProof({ t }) {
 
       {/* Photo evidence grid */}
       <div className="card">
-        <div className="section-title">Photo evidence — before &amp; after flood</div>
+        <div className="section-title">{t("proof.photoEvidence")}</div>
         <div className="photo-grid">
           {/* Before flood (pre-filled demo) */}
           <div className="photo-filled">
             <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg,#1a2a1a,#2a3a2a)", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 4 }}>
-              <div style={{ fontSize: 28 }}>🌾</div>
-              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.5)" }}>Before flood</div>
+              <Wheat size={30} color="rgba(255,255,255,0.78)" aria-hidden="true" />
+              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.5)" }}>{t("proof.beforeFlood")}</div>
             </div>
-            <div className="photo-filled-overlay">📍 10.4512°N, 105.2341°E · 02/05 06:14</div>
+            <div className="photo-filled-overlay"><MapPin size={11} aria-hidden="true" /> 10.4512N, 105.2341E · 02/05 06:14</div>
           </div>
           {/* After flood (pre-filled demo) */}
           <div className="photo-filled">
             <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg,#0d1a2a,#1a2a3a)", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 4 }}>
-              <div style={{ fontSize: 28 }}>🌊</div>
-              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.5)" }}>After flood</div>
+              <Waves size={30} color="rgba(255,255,255,0.78)" aria-hidden="true" />
+              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.5)" }}>{t("proof.afterFlood")}</div>
             </div>
-            <div className="photo-filled-overlay">📍 10.4512°N, 105.2341°E · 05/05 09:31</div>
+            <div className="photo-filled-overlay"><MapPin size={11} aria-hidden="true" /> 10.4512N, 105.2341E · 05/05 09:31</div>
           </div>
-          {/* Extra photo slots */}
-          {extraPhotos < 2 && (
+          {/* Extra photo slots — independent state */}
+          {!hasCropPhoto && (
             <div
               className="photo-slot"
               role="button"
               tabIndex={0}
-              onClick={() => setExtraPhotos((n) => n + 1)}
-              onKeyDown={(e) => e.key === "Enter" && setExtraPhotos((n) => n + 1)}
+              onClick={() => setHasCropPhoto(true)}
+              onKeyDown={(e) => e.key === "Enter" && setHasCropPhoto(true)}
             >
-              <div style={{ fontSize: 20 }}>+</div>
-              <span>Crop close-up</span>
+              <ImagePlus size={22} aria-hidden="true" />
+              <span>{t("proof.cropCloseup")}</span>
             </div>
           )}
-          {extraPhotos < 2 && (
+          {!hasWaterPhoto && (
             <div
               className="photo-slot"
               role="button"
               tabIndex={0}
-              onClick={() => setExtraPhotos((n) => n + 1)}
-              onKeyDown={(e) => e.key === "Enter" && setExtraPhotos((n) => n + 1)}
+              onClick={() => setHasWaterPhoto(true)}
+              onKeyDown={(e) => e.key === "Enter" && setHasWaterPhoto(true)}
             >
-              <div style={{ fontSize: 20 }}>+</div>
-              <span>Water depth</span>
+              <ImagePlus size={22} aria-hidden="true" />
+              <span>{t("proof.waterDepthPhoto")}</span>
             </div>
           )}
-          {extraPhotos >= 1 && (
+          {hasCropPhoto && (
             <div className="photo-filled">
               <div style={{ width: "100%", height: "100%", background: "var(--surface3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <div style={{ fontSize: 28, color: "var(--green)" }}>✓</div>
+                <Check size={30} color="var(--green)" aria-hidden="true" />
               </div>
-              <div className="photo-filled-overlay" style={{ color: "var(--green)" }}>Added</div>
+              <div className="photo-filled-overlay" style={{ color: "var(--green)" }}>{t("proof.cropCloseup")}</div>
             </div>
           )}
-          {extraPhotos >= 2 && (
+          {hasWaterPhoto && (
             <div className="photo-filled">
               <div style={{ width: "100%", height: "100%", background: "var(--surface3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <div style={{ fontSize: 28, color: "var(--green)" }}>✓</div>
+                <Check size={30} color="var(--green)" aria-hidden="true" />
               </div>
-              <div className="photo-filled-overlay" style={{ color: "var(--green)" }}>Added</div>
+              <div className="photo-filled-overlay" style={{ color: "var(--green)" }}>{t("proof.waterDepthPhoto")}</div>
             </div>
           )}
         </div>
         <div style={{ fontSize: 11, color: "var(--text3)" }}>
-          All photos are automatically GPS-tagged and timestamped. Cannot be edited after submission.
+          {t("proof.photoGpsNote")}
         </div>
       </div>
 
       {/* Field & damage details */}
       <form onSubmit={submit}>
         <div className="card">
-          <div className="section-title">Field &amp; damage details</div>
+          <div className="section-title">{t("proof.fieldDamageDetails")}</div>
 
           <div className="field-row">
             <label>{t("proof.fieldId")}</label>
@@ -198,15 +208,15 @@ export function LossProof({ t }) {
 
           <div className="field-row">
             <label>{t("proof.farmerName")}</label>
-            <input value={form.farmer_name} onChange={(e) => update("farmer_name", e.target.value)} />
+            <input type="text" value={form.farmer_name} onChange={(e) => update("farmer_name", e.target.value)} />
             {errors.farmer_name && <small className="field-error">{errors.farmer_name}</small>}
           </div>
 
           <div className="field-row">
             <label>{t("proof.crop")}</label>
             <select value={form.crop_type} onChange={(e) => update("crop_type", e.target.value)}>
-              <option value="rice">Rice (Winter-Spring crop, grain-filling stage)</option>
-              <option value="rice_sa">Rice (Summer-Autumn crop)</option>
+              <option value="rice">{t("proof.cropOptions.riceWinter")}</option>
+              <option value="maize">{t("crops.maize")}</option>
               <option value="vegetables">{t("crops.vegetables")}</option>
               <option value="fruit_trees">{t("crops.fruit_trees")}</option>
             </select>
@@ -270,22 +280,22 @@ export function LossProof({ t }) {
 
         {/* Proof score */}
         <div className="proof-status" style={{ display: "flex", gap: 16, alignItems: "center" }}>
-          <EvidenceDonut pct={proofPct} label="Evidence" />
+          <EvidenceDonut pct={proofPct} label={t("proof.evidenceCompleteness")} />
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>Evidence completeness</div>
+            <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{t("proof.evidenceCompleteness")}</div>
             <div style={{ fontSize: 11, color: "var(--text2)" }}>
               {proofPct >= 100
-                ? "✓ Evidence package complete — ready to submit."
+                ? t("proof.evidenceComplete")
                 : proofPct >= 80
-                ? "Add 2 more photos to reach 100% — maximises your claim amount."
-                : "Add photos to strengthen your claim. More evidence = higher approval rate."}
+                ? t("proof.evidenceNearComplete")
+                : t("proof.evidenceIncomplete")}
             </div>
           </div>
         </div>
 
         {/* Compensation estimate */}
         <div className="card" style={{ borderColor: "rgba(0,201,123,0.2)" }}>
-          <div className="section-title">Estimated government compensation</div>
+          <div className="section-title">{t("proof.estCompensation")}</div>
           <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 6 }}>
             <span style={{ fontSize: 32, fontWeight: 800, letterSpacing: -1, color: "var(--green)", fontFamily: "var(--mono)" }}>
               {comp}M
@@ -293,26 +303,31 @@ export function LossProof({ t }) {
             <span style={{ fontSize: 14, color: "var(--text2)" }}>VND</span>
           </div>
           <div style={{ fontSize: 12, color: "var(--text2)", lineHeight: 1.6, marginBottom: 14 }}>
-            Based on: {Number(form.area_ha).toFixed(1)} ha × {form.loss_pct}% loss × Rice support rate
-            ({(form.loss_pct >= 70 ? RATE_HIGH : RATE_MID).toLocaleString()} VND/ha for {form.loss_pct >= 70 ? "≥70%" : "30–70%"} loss).<br />
-            Rate applied: Nghị định 02/2017/NĐ-CP, Annex I — rice, natural disaster category.
+            {t("proof.compensationFormula", {
+              area: Number(form.area_ha).toFixed(1),
+              loss: form.loss_pct,
+              rate: (form.loss_pct >= 70 ? RATE_HIGH : RATE_MID).toLocaleString(),
+              band: form.loss_pct >= 70 ? ">=70%" : "30-70%",
+            })}
+            <br />
+            {t("proof.rateApplied")}
           </div>
           <button
             type="submit"
             className="primary-action"
             disabled={state.loading}
           >
-            {state.loading ? t("common.loading") : `${t("proof.submit")} →`}
+            {state.loading ? t("common.loading") : t("proof.submit")}
           </button>
           <div style={{ fontSize: 11, color: "var(--text3)", marginTop: 8, textAlign: "center" }}>
-            Claim reference generated on submission · Processing 15–30 days
+            {t("proof.processingTime")}
           </div>
         </div>
       </form>
 
       {/* Checklist */}
       <div className="card">
-        <div className="section-title">{t("proof.checklist.gps")} &amp; Evidence checklist</div>
+        <div className="section-title">{t("proof.evidenceChecklist")}</div>
         <div className="checklist-panel">
           <ChecklistItem done={checklist.gpsReady} label={t("proof.checklist.gps")} detail={t(`proof.gpsStatus.${gpsStatus}`)} />
           <ChecklistItem done={checklist.photoCountReady} label={t("proof.checklist.photoCount")} detail={t("common.items", { count: photos.length })} />

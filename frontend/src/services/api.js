@@ -47,14 +47,6 @@ export function getAlertStatus() {
   return requestJson("/alerts", {}, demoAlertStatus);
 }
 
-export function dispatchAlert(payload) {
-  return requestJson("/alerts/dispatch", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  }, () => demoDispatch(payload));
-}
-
 export function postHarvestDecision(payload) {
   return requestJson("/harvest-decision", {
     method: "POST",
@@ -97,7 +89,6 @@ function demoFloodStatus() {
       humidity: 82,
     })),
     cached: true,
-    source_freshness: { openweather: "cached", mrc: "cached", nasa: "cached" },
     stale_reason: null,
     data_sources: ["Demo fallback", "Local cache unavailable"],
   };
@@ -113,21 +104,18 @@ function demoAlertStatus() {
     title: "",
     message: "",
     action_required: "",
-    source_freshness: { openweather: "cached", mrc: "cached", nasa: "cached" },
+    rainfall_tier: "WARNING",
+    rainfall_forecast: [
+      { label: "T2", mm: 40 },
+      { label: "T3", mm: 55 },
+      { label: "T4", mm: 70 },
+      { label: "T5", mm: 90 },
+      { label: "T6", mm: 100 },
+      { label: "T7", mm: 65 },
+      { label: "CN", mm: 45 },
+    ],
     cached: true,
     stale_reason: null,
-    dispatch_status: "not_dispatched",
-  };
-}
-
-function demoDispatch(payload) {
-  return {
-    alert_id: payload.alert_id,
-    tier: payload.tier,
-    dispatch_status: "simulated",
-    push_sent: true,
-    sms_sent: false,
-    detail: "Backend unavailable; dispatch simulated in browser.",
   };
 }
 

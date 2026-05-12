@@ -1,7 +1,9 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import { FileText } from "lucide-react";
+import { useCountUp } from "../hooks/useCountUp.js";
 
-import { DataBanner, FormField } from "../components/SharedUI.jsx";
+import { DataBanner, ScreenHeader } from "../components/SharedUI.jsx";
 import { getFloodStatus, postHarvestDecision } from "../services/api.js";
 import { LossBarChart } from "../components/charts/LossBarChart.jsx";
 import { CropStageTimeline } from "../components/charts/CropStageTimeline.jsx";
@@ -82,6 +84,12 @@ export function HarvestDecision({ t }) {
 
   return (
     <div className="screen-stack">
+      <ScreenHeader
+        eyebrow={t("harvest.eyebrow")}
+        title={t("harvest.title")}
+        description={t("harvest.description")}
+      />
+
       {/* Banners */}
       {state.payload?.fromCache && <DataBanner>{t("common.staleData", { time: formatDateTime(state.payload.updatedAt) })}</DataBanner>}
       {state.payload?.demo && <DataBanner tone="info">{t("common.demoData")}</DataBanner>}
@@ -171,7 +179,7 @@ export function HarvestDecision({ t }) {
           disabled={state.loading}
           onClick={submit}
         >
-          {state.loading ? t("common.loading") : `${t("harvest.submit")} →`}
+          {state.loading ? t("common.loading") : t("harvest.submit")}
         </button>
       </div>
 
@@ -181,15 +189,18 @@ export function HarvestDecision({ t }) {
       {/* Export hint */}
       <div className="card" style={{ background: "rgba(59,130,246,0.05)", borderColor: "rgba(59,130,246,0.2)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ fontSize: 20 }}>📋</div>
+          <div className="inline-icon blue"><FileText size={20} aria-hidden="true" /></div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "var(--blue)" }}>Save this report</div>
-            <div style={{ fontSize: 11, color: "var(--text2)", marginTop: 2 }}>
-              Export your scenario analysis as PDF for loan officer or cooperative record
-            </div>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "var(--blue)" }}>{t("harvest.saveReport")}</div>
+            <div style={{ fontSize: 11, color: "var(--text2)", marginTop: 2 }}>{t("harvest.exportPdfDesc")}</div>
           </div>
-          <button className="btn btn-ghost" style={{ fontSize: 12, padding: "7px 12px", flexShrink: 0 }}>
-            Export PDF
+          <button
+            type="button"
+            className="btn btn-ghost"
+            style={{ fontSize: 12, padding: "7px 12px", flexShrink: 0 }}
+            onClick={() => alert(t("harvest.pdfComingSoon"))}
+          >
+            {t("harvest.exportPdf")}
           </button>
         </div>
       </div>
@@ -205,30 +216,12 @@ function HarvestResult({ data, t }) {
     <div className="screen-stack">
       {/* Scenario comparison */}
       <div className="card">
-        <div className="section-title">Scenario comparison — estimated crop loss</div>
+        <div className="section-title">{t("harvest.scenarioComparison")}</div>
         <div className="scenario-grid">
           {scenarios.map((scenario, i) => {
             const lossPct = Math.round(scenario.loss_pct);
             const cfg = scenarioCfgs[i] || scenarioCfgs[0];
-            return (
-              <div
-                key={scenario.label}
-                className={`scenario-card${scenario.is_recommended ? " winner" : ""}`}
-                style={{
-                  background: cfg.bg,
-                  borderColor: scenario.is_recommended ? cfg.border : "rgba(255,255,255,0.07)",
-                }}
-              >
-                <div className="sc-title" style={{ color: cfg.sc }}>{scenarioLabel(scenario.label, t)}</div>
-                <div className="sc-loss" style={{ color: cfg.tc }}>{lossPct}%</div>
-                <div className="sc-sub" style={{ color: cfg.sc }}>crop loss</div>
-                {scenario.is_recommended && (
-                  <div className="sc-badge" style={{ background: cfg.bg, color: cfg.tc, border: `1px solid ${cfg.border}` }}>
-                    {t("harvest.recommended")}
-                  </div>
-                )}
-              </div>
-            );
+            return <ScenarioCard key={scenario.label} scenario={scenario} lossPct={lossPct} cfg={cfg} t={t} />;
           })}
         </div>
 
@@ -252,11 +245,12 @@ function HarvestResult({ data, t }) {
         <LossBarChart
           scenarios={scenarios.map((s, i) => ({
             label: s.label,
-            labelShort: i === 0 ? "Thu hoạch ngay" : i === 1 ? "Chờ lũ" : "Sau lũ",
+            labelShort: t(`harvest.scenarioLabels.${s.label}`),
             loss_pct: Math.round(s.loss_pct),
             is_recommended: s.is_recommended,
             color: scenarioCfgs[i]?.tc || "#00C97B",
           }))}
+          recommendedLabel={t("harvest.cropLossRecommended")}
         />
       </div>
 
@@ -278,7 +272,7 @@ function HarvestResult({ data, t }) {
           </div>
         </div>
         <div style={{ marginTop: 12 }}>
-          <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 6 }}>Growth stage progress</div>
+          <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 6 }}>{t("harvest.growthStageProgress")}</div>
           <CropStageTimeline
             currentStage={data.growth_stage || "grain_filling"}
             stages={["seedling", "tillering", "panicle_initiation", "booting", "heading", "grain_filling", "maturity"]}
@@ -317,6 +311,28 @@ function HarvestResult({ data, t }) {
           {t("common.dataSources")}: {data.data_sources.join(" | ")}
         </p>
       </div>
+    </div>
+  );
+}
+
+function ScenarioCard({ scenario, lossPct, cfg, t }) {
+  const animated = useCountUp(lossPct, 600);
+  return (
+    <div
+      className={`scenario-card${scenario.is_recommended ? " winner" : ""}`}
+      style={{
+        background: cfg.bg,
+        borderColor: scenario.is_recommended ? cfg.border : "rgba(255,255,255,0.07)",
+      }}
+    >
+      <div className="sc-title" style={{ color: cfg.sc }}>{scenarioLabel(scenario.label, t)}</div>
+      <div className="sc-loss" style={{ color: cfg.tc }}>{animated}%</div>
+      <div className="sc-sub" style={{ color: cfg.sc }}>{t("harvest.cropLoss")}</div>
+      {scenario.is_recommended && (
+        <div className="sc-badge" style={{ background: cfg.bg, color: cfg.tc, border: `1px solid ${cfg.border}` }}>
+          {t("harvest.recommended")}
+        </div>
+      )}
     </div>
   );
 }

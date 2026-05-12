@@ -58,7 +58,7 @@ def test_loads_fresh_cache_files():
 def test_missing_cache_uses_deterministic_fallback():
     inputs = load_flood_inputs(cache_dir=workspace_dir("missing-cache"), now_iso="2026-05-02T06:45:00+00:00")
 
-    assert inputs.cached is True
+    assert inputs.cached is False
     assert inputs.stale_reason == "fallback_data_used"
     assert inputs.river["station"] == "Tan Chau"
     assert inputs.forecast

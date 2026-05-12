@@ -4,9 +4,36 @@ __pycache__/
 .venv/
 backend/cache/*.tmp
 reports/
+
+# Local / generated (not committed) — uploads & test output
 uploads/
 test-artifacts/
+# pytest lives in tests/ — that folder stays tracked on purpose
+
 frontend/node_modules/
 frontend/dist/
 frontend/.vite/
 *.log
+
+# Environment & secrets
+.env
+.env.*
+
+# Tooling / agent artifacts
+# Accidental root folder — brace path pasted as literal (covers whole junk tree under it)
+/{.agents/
+.agents/
+.history/
+.playwright-mcp/
+.claude/
+.idea/
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Local pytest cache dirs (sometimes created at repo root)
+pytest-cache-files-*/
+
+# Deploy
+.vercel

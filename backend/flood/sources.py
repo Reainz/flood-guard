@@ -78,7 +78,7 @@ def load_flood_inputs(
         river=river or FALLBACK_RIVER,
         forecast=forecast or FALLBACK_FORECAST,
         nasa=nasa_payload or FALLBACK_NASA,
-        cached=bool(missing_or_stale),
+        cached=not bool(missing_or_stale),
         data_sources=["OpenWeatherMap", "MRC Tan Chau station", "NASA POWER"],
         source_freshness=freshness,
         stale_reason=stale_reason,

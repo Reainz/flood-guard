@@ -19,7 +19,7 @@ export default function LeafletMap({ lat, lon, riskLevel, stationName }) {
     let cancelled = false;
     getLeaflet().then((leaflet) => {
       if (cancelled || !containerRef.current || mapRef.current) return;
-      const map = leaflet.map(containerRef.current, { zoomControl: false, attributionControl: false })
+      const map = leaflet.map(containerRef.current, { zoomControl: false })
                          .setView([lat, lon], 12);
       leaflet.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 18,

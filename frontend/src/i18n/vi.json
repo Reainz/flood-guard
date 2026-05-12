@@ -3,13 +3,20 @@
     "title": "FloodGuard Việt Nam",
     "track": "Asian Hackathon for Green Future 2026",
     "mvp": "MVP địa phương",
-    "navigation": "Điều hướng chính"
+    "navigation": "Điều hướng chính",
+    "toggleTheme": "Đổi giao diện sáng tối",
+    "toggleLanguage": "Đổi ngôn ngữ",
+    "logoAlt": "Biểu trưng FloodGuard Việt Nam"
   },
   "tabs": {
     "dashboard": "Lũ",
     "harvest": "Thu hoạch",
     "alerts": "Cảnh báo",
     "proof": "Hồ sơ"
+  },
+  "countdown": {
+    "hours": "Giờ",
+    "minutes": "Phút"
   },
   "common": {
     "loading": "Đang tải",
@@ -19,14 +26,14 @@
     "backendCached": "Nguồn dữ liệu backend đang dùng cache.",
     "demoData": "Backend chưa phản hồi; đang dùng dữ liệu demo để tiếp tục trình bày.",
     "millionVnd": "triệu VND",
-    "sourceFreshness": "Độ mới nguồn dữ liệu",
     "dataSources": "Nguồn dữ liệu",
     "required": "Bắt buộc",
     "valid": "Hợp lệ",
     "invalid": "Chưa hợp lệ",
     "ready": "Sẵn sàng",
     "notReady": "Cần bổ sung",
-    "items": "{count} mục"
+    "items": "{count} mục",
+    "live": "Trực tiếp"
   },
   "risk": {
     "LOW": "Thấp",
@@ -39,22 +46,10 @@
     "WARNING": "Cảnh báo",
     "CRITICAL": "Khẩn cấp"
   },
-  "freshness": {
-    "fresh": "Mới",
-    "stale": "Cũ",
-    "cached": "Cache",
-    "missing": "Thiếu",
-    "unknown": "Không rõ"
-  },
   "confidence": {
     "low": "Thấp",
     "medium": "Trung bình",
     "high": "Cao"
-  },
-  "sources": {
-    "openweather": "Mưa",
-    "mrc": "Sông",
-    "nasa": "NASA"
   },
   "river": {
     "trend": "Xu hướng",
@@ -86,13 +81,18 @@
     "confidence": "Độ tin cậy",
     "forecast": "Dự báo mưa",
     "location": "Khu vực ruộng",
-    "locationSummary": "Vị trí demo: An Giang, gần trạm Tân Châu.",
-    "actionTitle": "Việc cần ưu tiên",
-    "actionLow": "Tiếp tục theo dõi mực nước và chuẩn bị vật tư cơ bản.",
-    "actionModerate": "Kiểm tra bờ bao, máy bơm và ruộng thấp trong hôm nay.",
-    "actionHigh": "Mở màn hình Thu hoạch để so sánh thiệt hại trước khi lũ đến.",
-    "actionCritical": "Ưu tiên thu hoạch hoặc di dời tài sản ở phần ruộng thấp ngay.",
-    "demoExplanation": "Mực nước đang ở mức báo động trong dữ liệu demo. Ước tính lũ đến trong 71 giờ."
+    "riverMonitoring": "Theo dõi mực nước sông",
+    "riseRate": "Tốc độ dâng: {rate} cm/h",
+    "mapLegendFlood": "Vùng ngập lũ",
+    "mapLegendField": "Ruộng của bạn",
+    "fieldOverview": "Tổng quan ruộng",
+    "cropTypeLabel": "Loại cây trồng",
+    "fieldAreaLabel": "Diện tích ruộng",
+    "registeredField": "Ruộng đã đăng ký",
+    "predictedDepthLabel": "Độ sâu dự kiến",
+    "riskLevelLabel": "Mức rủi ro",
+    "floodRiskGauge": "Rủi ro lũ",
+    "mapLoading": "Đang tải bản đồ"
   },
   "harvest": {
     "eyebrow": "Quyết định mùa vụ",
@@ -105,7 +105,7 @@
     "prefillLoading": "Đang lấy điều kiện lũ mới nhất.",
     "prefillFailed": "Không lấy được điều kiện lũ mới nhất; đang dùng giá trị demo.",
     "plantingDate": "Ngày gieo sạ",
-    "crop": "Cây trồng",
+    "crop": "Kích thước cây (cm)",
     "area": "Diện tích ha",
     "elevation": "Độ cao ruộng",
     "daysToFlood": "Số ngày trước lũ",
@@ -124,6 +124,14 @@
     "demoGrowthStage": "Vào chắc - hạt đang chắc",
     "demoLegalBasis": "Dữ liệu demo theo khung hỗ trợ địa phương",
     "demoDeadline": "Nộp hồ sơ trong 15 ngày sau khi xác nhận thiệt hại",
+    "scenarioComparison": "So sánh phương án — thiệt hại ước tính",
+    "cropLoss": "thiệt hại",
+    "cropLossRecommended": "✓ Đề xuất",
+    "saveReport": "Lưu báo cáo này",
+    "exportPdfDesc": "Xuất phân tích thành PDF cho hồ sơ hợp tác xã hoặc tổ chức tài chính",
+    "exportPdf": "Xuất PDF",
+    "pdfComingSoon": "Tính năng xuất PDF sẽ có trong phiên bản tiếp theo.",
+    "growthStageProgress": "Tiến độ sinh trưởng",
     "scenarioLabels": {
       "harvest_now": "Thu hoạch ngay",
       "wait": "Chờ lũ qua",
@@ -160,17 +168,10 @@
   "alerts": {
     "eyebrow": "Cảnh báo vận hành",
     "title": "Trạng thái cảnh báo",
-    "description": "Theo dõi mức cảnh báo đang hoạt động và gửi thử thông báo cho luồng demo.",
+    "description": "Xem mức cảnh báo lũ hiện tại và việc nên làm cho ruộng của bạn.",
     "activeTier": "Mức cảnh báo",
     "station": "Trạm",
     "actions": "Việc cần làm",
-    "reasons": "Lý do kích hoạt",
-    "dispatch": "Gửi thử cảnh báo",
-    "dispatchStatus": "Trạng thái gửi: {status}",
-    "dispatchDetail": "Chi tiết: {detail}",
-    "dispatchFailed": "Không gửi thử được cảnh báo. Vui lòng kiểm tra backend.",
-    "dispatchMode": "Mô phỏng SMS nếu Twilio chưa cấu hình.",
-    "demoDispatchDetail": "Backend chưa phản hồi; thao tác gửi được mô phỏng trong trình duyệt.",
     "demo": {
       "WATCH": {
         "title": "Theo dõi",
@@ -188,10 +189,24 @@
         "action": "Thu hoạch ngay phần ruộng thấp hoặc di tản theo hướng dẫn địa phương."
       }
     },
-    "status": {
-      "sent": "Đã gửi",
-      "simulated": "Đã mô phỏng"
-    }
+    "cropTips": "Khuyến nghị theo cây trồng",
+    "tips": {
+      "rice": {
+        "strong": "Lúa (vào chắc): ",
+        "text": "Kiểm tra khả năng thu hoạch ngay. Nếu bông đã chắc trên 80%, thu hoạch khẩn cấp có thể giảm thiệt hại do lũ."
+      },
+      "vegetables": {
+        "strong": "Rau màu: ",
+        "text": "Thu hoạch toàn bộ phần đã chín. Chuyển cây giống lên luống cao hoặc khu đất cao."
+      },
+      "safety": {
+        "strong": "An toàn: ",
+        "text": "Chuẩn bị túi khẩn cấp và nắm tuyến di chuyển đến Nhà cộng đồng Tân Châu, cách khoảng 2.3 km về hướng đông bắc."
+      }
+    },
+    "rainfallWatch": "Theo dõi mưa 7 ngày",
+    "rainfallSource": "Dự báo khu vực · Dữ liệu NCHMF",
+    "rainfallDesc": "Dự báo mưa trên mức trung bình ở thượng nguồn trong 7 ngày tới. Nguy cơ lũ đồng bằng có thể tăng trong hai tuần sắp tới."
   },
   "proof": {
     "eyebrow": "Hồ sơ thiệt hại",
@@ -272,6 +287,27 @@
       "photoType": "Chỉ nhận ảnh JPEG hoặc PNG.",
       "photoSize": "Mỗi ảnh tối đa 5MB.",
       "gps": "GPS chưa sẵn sàng; có thể dùng vị trí demo nếu trình duyệt không cấp quyền."
-    }
+    },
+    "lossDocTitle": "Hồ sơ thiệt hại",
+    "lossDocDesc": "Theo Nghị định 02/2017/NĐ-CP, cần nộp bằng chứng trong vòng 15 ngày để nhận hỗ trợ nông nghiệp. Hồ sơ này tạo gói bằng chứng chính thức.",
+    "beforeFlood": "Trước lũ",
+    "afterFlood": "Sau lũ",
+    "cropCloseup": "Cận cảnh cây trồng",
+    "waterDepthPhoto": "Độ sâu nước",
+    "photoGpsNote": "Tất cả ảnh được gắn tọa độ GPS và thời gian tự động. Không thể chỉnh sửa sau khi nộp.",
+    "fieldDamageDetails": "Chi tiết ruộng & thiệt hại",
+    "evidenceCompleteness": "Mức độ đầy đủ bằng chứng",
+    "evidenceComplete": "✓ Hồ sơ đầy đủ — sẵn sàng nộp.",
+    "evidenceNearComplete": "Thêm 2 ảnh để đạt 100% — tối đa hóa số tiền yêu cầu.",
+    "evidenceIncomplete": "Thêm ảnh để tăng cường hồ sơ. Nhiều bằng chứng = tỷ lệ duyệt cao hơn.",
+    "estCompensation": "Ước tính hỗ trợ nhà nước",
+    "processingTime": "Mã yêu cầu được tạo khi nộp · Thời gian xử lý 15–30 ngày",
+    "photoEvidence": "Bằng chứng ảnh - trước và sau lũ",
+    "cropOptions": {
+      "riceWinter": "Lúa Đông Xuân, giai đoạn vào chắc"
+    },
+    "compensationFormula": "Căn cứ: {area} ha x thiệt hại {loss}% x mức hỗ trợ lúa ({rate} VND/ha cho nhóm thiệt hại {band}).",
+    "rateApplied": "Mức áp dụng: Nghị định 02/2017/NĐ-CP, Phụ lục I - lúa, thiên tai.",
+    "evidenceChecklist": "Danh sách GPS và bằng chứng"
   }
 }

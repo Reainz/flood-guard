@@ -77,6 +77,16 @@ Returns the active alert tier for a location and station.
   "title": "Khan cap",
   "message": "Lu den trong 9 gio. Do sau uoc tinh ~65cm.",
   "action_required": "Thu hoach ngay hoac di tan theo huong dan dia phuong.",
+  "rainfall_forecast": [
+    { "label": "T2", "mm": 0 },
+    { "label": "T3", "mm": 12.4 },
+    { "label": "T4", "mm": 8.0 },
+    { "label": "T5", "mm": 0 },
+    { "label": "T6", "mm": 0 },
+    { "label": "T7", "mm": 0 },
+    { "label": "CN", "mm": 0 }
+  ],
+  "rainfall_tier": "WATCH",
   "source_freshness": { "openweather": "fresh", "mrc": "fresh", "nasa": "fresh" },
   "cached": true,
   "stale_reason": null,

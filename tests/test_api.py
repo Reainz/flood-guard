@@ -41,6 +41,8 @@ def test_alerts_endpoint():
     assert data["trigger_reasons"]
     assert data["dedupe_key"]
     assert data["dispatch_status"] == "not_dispatched"
+    assert len(data["rainfall_forecast"]) == 7
+    assert data["rainfall_tier"] in {"WATCH", "WARNING"}
 
 
 def test_alert_dispatch_endpoint_simulates_without_twilio():

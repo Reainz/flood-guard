@@ -1,7 +1,57 @@
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
+from typing import Literal
 
-from backend.alerts.models import Alert, AlertDispatchResponse, AlertResponse
+from backend.alerts.models import Alert, AlertDispatchResponse, AlertResponse, RainfallDayPoint
 from backend.flood.models import FloodStatusResponse
+
+# Vietnam uses UTC+7 year-round (no IANA tz database required on Windows).
+_VN_TZ = timezone(timedelta(hours=7))
+
+HEAVY_DAILY_MM = 85
+_RAIN_72H_HEAVY_MM = 50
+_VN_DOW_LABELS = ("T2", "T3", "T4", "T5", "T6", "T7", "CN")
+
+
+def _parse_forecast_time_utc(time_str: str) -> datetime | None:
+    for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S"):
+        try:
+            return datetime.strptime(time_str, fmt).replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+    return None
+
+
+def build_rainfall_forecast(
+    status: FloodStatusResponse,
+    *,
+    anchor_date: date | None = None,
+) -> tuple[list[RainfallDayPoint], Literal["WATCH", "WARNING"]]:
+    """Seven-day daily rainfall totals (UTC+7 / Vietnam) and tier for the rainfall outlook card."""
+    vn = _VN_TZ
+    day0 = anchor_date or datetime.now(vn).date()
+    sums: dict[date, float] = {}
+    for item in status.forecast:
+        dt = _parse_forecast_time_utc(item.time)
+        if dt is None:
+            continue
+        d_vn = dt.astimezone(vn).date()
+        sums[d_vn] = sums.get(d_vn, 0.0) + float(item.rain_mm)
+
+    points: list[RainfallDayPoint] = []
+    for i in range(7):
+        d = day0 + timedelta(days=i)
+        mm = round(sums.get(d, 0.0), 1)
+        lab = _VN_DOW_LABELS[d.weekday()]
+        points.append(RainfallDayPoint(label=lab, mm=mm))
+
+    rainfall_72h = sum(item.rain_mm for item in status.forecast)
+    max_daily = max((p.mm for p in points), default=0.0)
+    tier: Literal["WATCH", "WARNING"] = (
+        "WARNING"
+        if (max_daily >= HEAVY_DAILY_MM or rainfall_72h > _RAIN_72H_HEAVY_MM)
+        else "WATCH"
+    )
+    return points, tier
 
 
 def alert_from_flood_status(status: FloodStatusResponse) -> Alert:
@@ -32,6 +82,7 @@ def build_alert(status: FloodStatusResponse, station: str | None = None) -> Aler
     station_name = station or status.river.station
     tier, reasons = _tier_and_reasons(status)
     alert = _alert_copy(tier=tier, status=status)
+    rainfall_forecast, rainfall_tier = build_rainfall_forecast(status)
     today = date.today().isoformat()
     return AlertResponse(
         alert_id=f"{station_name}_{tier}_{today}",
@@ -42,6 +93,8 @@ def build_alert(status: FloodStatusResponse, station: str | None = None) -> Aler
         title=alert.title,
         message=alert.message,
         action_required=alert.action_required,
+        rainfall_forecast=rainfall_forecast,
+        rainfall_tier=rainfall_tier,
         source_freshness=status.source_freshness,
         cached=status.cached,
         stale_reason=status.stale_reason,

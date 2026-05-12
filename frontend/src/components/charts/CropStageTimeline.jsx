@@ -1,7 +1,7 @@
 import React from "react";
 
-const STAGE_LABELS_VI = {
-  seedling:           "Mạ",
+const STAGE_VI = {
+  seedling:           "Mạ non",
   tillering:          "Đẻ nhánh",
   panicle_initiation: "Làm đòng",
   booting:            "Trỗ bông",
@@ -15,7 +15,7 @@ export function CropStageTimeline({ currentStage, stages }) {
 
   return (
     <div style={{ overflowX: "auto", paddingBottom: 4 }}>
-      <div style={{ display: "flex", alignItems: "flex-start", minWidth: 340, position: "relative" }}>
+      <div style={{ display: "flex", alignItems: "flex-start", minWidth: 320, position: "relative" }}>
         <div style={{
           position: "absolute",
           top: 10,
@@ -28,8 +28,6 @@ export function CropStageTimeline({ currentStage, stages }) {
         {stages.map((stage, i) => {
           const isPast   = i < activeIdx;
           const isActive = i === activeIdx;
-          const dotColor = isPast ? "var(--green)" : isActive ? "var(--blue)" : "var(--surface3)";
-          const dotBorder = isActive ? "2px solid var(--blue)" : isPast ? "2px solid var(--green)" : "2px solid var(--border2)";
           return (
             <div
               key={stage}
@@ -42,24 +40,21 @@ export function CropStageTimeline({ currentStage, stages }) {
                   width: isActive ? 20 : 14,
                   height: isActive ? 20 : 14,
                   borderRadius: "50%",
-                  background: dotColor,
-                  border: dotBorder,
+                  background: isPast ? "var(--green)" : isActive ? "var(--blue)" : "var(--surface3)",
+                  border: isActive ? "2px solid var(--blue)" : isPast ? "2px solid var(--green)" : "2px solid var(--border2)",
                   transition: "all 0.3s ease",
                   flexShrink: 0,
                 }}
               />
               <div style={{
-                fontSize: 9,
-                marginTop: 4,
+                fontSize: isActive ? 10 : 9,
+                marginTop: 5,
                 color: isActive ? "var(--blue)" : isPast ? "var(--green)" : "var(--text3)",
                 fontWeight: isActive ? 700 : 400,
                 textAlign: "center",
                 lineHeight: 1.2,
               }}>
-                {stage}
-              </div>
-              <div style={{ fontSize: 8, color: "var(--text3)", textAlign: "center", lineHeight: 1.1, marginTop: 1 }}>
-                {STAGE_LABELS_VI[stage] || ""}
+                {STAGE_VI[stage] || stage}
               </div>
             </div>
           );

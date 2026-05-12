@@ -13,7 +13,7 @@ describe("CropStageTimeline", () => {
 
   it("marks the active stage", () => {
     render(<CropStageTimeline currentStage="grain_filling" stages={STAGES} />);
-    expect(screen.getByText("grain_filling").closest(".stage-dot-wrap")).toHaveClass("active");
+    expect(screen.getByText("Vào chắc").closest(".stage-dot-wrap")).toHaveClass("active");
   });
 
   it("marks past stages as completed", () => {

@@ -3,13 +3,20 @@
     "title": "FloodGuard Vietnam",
     "track": "Asian Hackathon for Green Future 2026",
     "mvp": "Local MVP",
-    "navigation": "Main navigation"
+    "navigation": "Main navigation",
+    "toggleTheme": "Toggle theme",
+    "toggleLanguage": "Toggle language",
+    "logoAlt": "FloodGuard Vietnam logo"
   },
   "tabs": {
     "dashboard": "Flood",
     "harvest": "Harvest",
     "alerts": "Alerts",
     "proof": "Records"
+  },
+  "countdown": {
+    "hours": "Hours",
+    "minutes": "Minutes"
   },
   "common": {
     "loading": "Loading",
@@ -19,14 +26,14 @@
     "backendCached": "Backend data source is using cache.",
     "demoData": "Backend not responding; using demo data to continue the demo.",
     "millionVnd": "million VND",
-    "sourceFreshness": "Data source freshness",
     "dataSources": "Data sources",
     "required": "Required",
     "valid": "Valid",
     "invalid": "Invalid",
     "ready": "Ready",
     "notReady": "Needs update",
-    "items": "{count} items"
+    "items": "{count} items",
+    "live": "Live"
   },
   "risk": {
     "LOW": "Low",
@@ -39,22 +46,10 @@
     "WARNING": "Warning",
     "CRITICAL": "Critical"
   },
-  "freshness": {
-    "fresh": "Fresh",
-    "stale": "Stale",
-    "cached": "Cached",
-    "missing": "Missing",
-    "unknown": "Unknown"
-  },
   "confidence": {
     "low": "Low",
     "medium": "Medium",
     "high": "High"
-  },
-  "sources": {
-    "openweather": "Rain",
-    "mrc": "River",
-    "nasa": "NASA"
   },
   "river": {
     "trend": "Trend",
@@ -86,13 +81,18 @@
     "confidence": "Confidence",
     "forecast": "Rainfall forecast",
     "location": "Field location",
-    "locationSummary": "Demo location: An Giang, near Tan Chau station.",
-    "actionTitle": "Priority actions",
-    "actionLow": "Continue monitoring river levels and prepare basic supplies.",
-    "actionModerate": "Check embankments, pumps, and low-lying fields today.",
-    "actionHigh": "Open the Harvest screen to compare losses before the flood arrives.",
-    "actionCritical": "Prioritize harvesting or moving assets in low-lying fields immediately.",
-    "demoExplanation": "River level is at alert stage in demo data. Estimated flood arrival in 71 hours."
+    "riverMonitoring": "River level monitoring",
+    "riseRate": "Rise rate: {rate} cm/h",
+    "mapLegendFlood": "Flood risk zone",
+    "mapLegendField": "Your field",
+    "fieldOverview": "Field overview",
+    "cropTypeLabel": "Crop type",
+    "fieldAreaLabel": "Field area",
+    "registeredField": "Registered field",
+    "predictedDepthLabel": "Predicted depth",
+    "riskLevelLabel": "Risk level",
+    "floodRiskGauge": "Flood Risk",
+    "mapLoading": "Loading map"
   },
   "harvest": {
     "eyebrow": "Crop decision",
@@ -105,7 +105,7 @@
     "prefillLoading": "Fetching latest flood conditions.",
     "prefillFailed": "Could not fetch latest flood conditions; using demo values.",
     "plantingDate": "Planting date",
-    "crop": "Crop",
+    "crop": "Crop Size (cm)",
     "area": "Field area (ha)",
     "elevation": "Field elevation",
     "daysToFlood": "Days to flood",
@@ -124,6 +124,14 @@
     "demoGrowthStage": "Grain filling",
     "demoLegalBasis": "Demo data based on local support framework",
     "demoDeadline": "File within 15 days after damage confirmation",
+    "scenarioComparison": "Scenario comparison — estimated crop loss",
+    "cropLoss": "crop loss",
+    "cropLossRecommended": "✓ Recommended",
+    "saveReport": "Save this report",
+    "exportPdfDesc": "Export your scenario analysis as PDF for loan officer or cooperative record",
+    "exportPdf": "Export PDF",
+    "pdfComingSoon": "PDF export will be available in the next version.",
+    "growthStageProgress": "Growth stage progress",
     "scenarioLabels": {
       "harvest_now": "Harvest now",
       "wait": "Wait for flood",
@@ -160,17 +168,10 @@
   "alerts": {
     "eyebrow": "Operational alerts",
     "title": "Alert status",
-    "description": "Monitor active alert levels and test notifications for the demo flow.",
+    "description": "See your current flood alert level and practical steps for your crops.",
     "activeTier": "Alert level",
     "station": "Station",
     "actions": "Actions needed",
-    "reasons": "Trigger reasons",
-    "dispatch": "Send test alert",
-    "dispatchStatus": "Send status: {status}",
-    "dispatchDetail": "Detail: {detail}",
-    "dispatchFailed": "Could not send test alert. Please check the backend.",
-    "dispatchMode": "Simulates SMS if Twilio is not configured.",
-    "demoDispatchDetail": "Backend not responding; send action simulated in browser.",
     "demo": {
       "WATCH": {
         "title": "Watch",
@@ -188,10 +189,24 @@
         "action": "Harvest low-lying fields immediately or evacuate per local guidance."
       }
     },
-    "status": {
-      "sent": "Sent",
-      "simulated": "Simulated"
-    }
+    "cropTips": "Crop-specific recommendations",
+    "tips": {
+      "rice": {
+        "strong": "Rice (grain filling): ",
+        "text": "Assess harvest readiness immediately. If panicles are 80%+ filled, emergency harvest may be preferable to flood damage."
+      },
+      "vegetables": {
+        "strong": "Vegetables: ",
+        "text": "Harvest all mature produce immediately. Move seedlings to elevated ground or raised beds."
+      },
+      "safety": {
+        "strong": "Safety: ",
+        "text": "Prepare emergency kit. Know the evacuation route to Tan Chau Community Center, 2.3 km northeast."
+      }
+    },
+    "rainfallWatch": "7-day rainfall watch",
+    "rainfallSource": "Regional forecast · NCHMF data",
+    "rainfallDesc": "Above-average rain is expected upstream for the next 7 days. Delta flood risk may rise over the next two weeks."
   },
   "proof": {
     "eyebrow": "Damage records",
@@ -272,6 +287,27 @@
       "photoType": "Only JPEG or PNG photos accepted.",
       "photoSize": "Each photo maximum 5 MB.",
       "gps": "GPS not ready; you may use demo location if browser permission is denied."
-    }
+    },
+    "lossDocTitle": "Loss documentation report",
+    "lossDocDesc": "Under Nghị định 02/2017/NĐ-CP, documented evidence is required to claim government agricultural disaster support within 15 days. This report generates your official evidence package.",
+    "beforeFlood": "Before flood",
+    "afterFlood": "After flood",
+    "cropCloseup": "Crop close-up",
+    "waterDepthPhoto": "Water depth",
+    "photoGpsNote": "All photos are automatically GPS-tagged and timestamped. Cannot be edited after submission.",
+    "fieldDamageDetails": "Field & damage details",
+    "evidenceCompleteness": "Evidence completeness",
+    "evidenceComplete": "✓ Evidence package complete — ready to submit.",
+    "evidenceNearComplete": "Add 2 more photos to reach 100% — maximises your claim amount.",
+    "evidenceIncomplete": "Add photos to strengthen your claim. More evidence = higher approval rate.",
+    "estCompensation": "Estimated government compensation",
+    "processingTime": "Claim reference generated on submission · Processing 15–30 days",
+    "photoEvidence": "Photo evidence - before and after flood",
+    "cropOptions": {
+      "riceWinter": "Rice (Winter-Spring crop, grain-filling stage)"
+    },
+    "compensationFormula": "Based on: {area} ha x {loss}% loss x rice support rate ({rate} VND/ha for {band} loss).",
+    "rateApplied": "Rate applied: Decree 02/2017/ND-CP, Annex I - rice, natural disaster category.",
+    "evidenceChecklist": "GPS and evidence checklist"
   }
 }

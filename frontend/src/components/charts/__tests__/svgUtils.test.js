@@ -32,3 +32,15 @@ describe("describeArc", () => {
     expect(d).toContain(" A ");
   });
 });
+
+describe("describeArc edge cases", () => {
+  it("produces a non-empty path at exactly 180 degrees", () => {
+    const d = describeArc(100, 100, 80, 270, 450);
+    expect(d).toContain("1 1");
+  });
+
+  it("returns empty string when startAngle equals endAngle", () => {
+    const d = describeArc(100, 100, 80, 270, 270);
+    expect(d).toBe("");
+  });
+});

@@ -35,22 +35,6 @@ export function RiskPanel({ eyebrow, title, description, level, children }) {
   );
 }
 
-export function FreshnessChips({ freshness = {}, t }) {
-  const entries = Object.entries(freshness);
-  if (!entries.length) return null;
-
-  return (
-    <div className="chip-row">
-      {entries.map(([source, status]) => (
-        <span className={`source-chip freshness-${status}`} key={source}>
-          <strong>{t(`sources.${source}`)}</strong>
-          {t(`freshness.${status}`)}
-        </span>
-      ))}
-    </div>
-  );
-}
-
 export function FormField({ label, error, hint, children, span = false }) {
   return (
     <label className={span ? "form-field form-field-wide" : "form-field"}>

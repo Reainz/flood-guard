@@ -10,6 +10,11 @@ class Alert(BaseModel):
     action_required: str
 
 
+class RainfallDayPoint(BaseModel):
+    label: str
+    mm: float = Field(ge=0)
+
+
 class AlertResponse(BaseModel):
     alert_id: str
     tier: Literal["WATCH", "WARNING", "CRITICAL"]
@@ -19,6 +24,8 @@ class AlertResponse(BaseModel):
     title: str
     message: str
     action_required: str
+    rainfall_forecast: list[RainfallDayPoint]
+    rainfall_tier: Literal["WATCH", "WARNING"]
     source_freshness: dict[str, str]
     cached: bool
     stale_reason: str | None = None

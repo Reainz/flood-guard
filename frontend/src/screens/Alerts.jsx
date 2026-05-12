@@ -1,26 +1,33 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import { AlertTriangle, CloudRain, Home, Leaf, Sprout } from "lucide-react";
 
-import { DataBanner, FreshnessChips, SkeletonBlock } from "../components/SharedUI.jsx";
-import { dispatchAlert, getAlertStatus } from "../services/api.js";
+import { DataBanner, ScreenHeader, SkeletonBlock } from "../components/SharedUI.jsx";
+import { getAlertStatus } from "../services/api.js";
 import { RainfallMiniChart } from "../components/charts/RainfallMiniChart.jsx";
 
+const DEMO_RAINFALL = [
+  { label: "T2", mm: 40 }, { label: "T3", mm: 55 },
+  { label: "T4", mm: 70 }, { label: "T5", mm: 90 },
+  { label: "T6", mm: 100}, { label: "T7", mm: 65 },
+  { label: "CN", mm: 45 },
+];
+
 const tierConfig = {
-  WATCH:    { color: "var(--blue)",  dimColor: "var(--blue-dim)",  sevBg: "var(--blue)",  emoji: "🔵", label: "Watch" },
-  WARNING:  { color: "var(--amber)", dimColor: "var(--amber-dim)", sevBg: "var(--amber)", emoji: "⚠️", label: "Warning" },
-  CRITICAL: { color: "var(--red)",   dimColor: "var(--red-dim)",   sevBg: "var(--red)",   emoji: "🚨", label: "Critical" },
+  WATCH:    { color: "var(--blue)",  dimColor: "var(--blue-dim)",  sevBg: "var(--blue)",  icon: CloudRain },
+  WARNING:  { color: "var(--amber)", dimColor: "var(--amber-dim)", sevBg: "var(--amber)", icon: AlertTriangle },
+  CRITICAL: { color: "var(--red)",   dimColor: "var(--red-dim)",   sevBg: "var(--red)",   icon: AlertTriangle },
 };
 
 const cropTips = [
-  { icon: "🌾", bg: "var(--amber-dim)", color: "var(--amber)", strong: "Rice (grain-filling):", text: " Assess harvest readiness immediately. If panicles are 80%+ filled, emergency harvest may be preferable to flood damage." },
-  { icon: "🥬", bg: "var(--red-dim)",   color: "var(--red)",   strong: "Vegetables:",           text: " Harvest all mature produce immediately. Move seedlings to elevated ground or raised beds." },
-  { icon: "🏠", bg: "var(--blue-dim)",  color: "var(--blue)",  strong: "Safety:",               text: " Prepare emergency kit. Know evacuation route to nearest shelter (Tân Châu Community Center, 2.3 km NE)." },
+  { key: "rice", icon: Sprout, bg: "var(--amber-dim)", color: "var(--amber)" },
+  { key: "vegetables", icon: Leaf, bg: "var(--red-dim)", color: "var(--red)" },
+  { key: "safety", icon: Home, bg: "var(--blue-dim)", color: "var(--blue)" },
 ];
 
 
 export function Alerts({ t }) {
   const [state, setState] = useState({ loading: true, payload: null, error: null });
-  const [dispatchState, setDispatchState] = useState({ loading: false, payload: null, error: null });
 
   useEffect(() => {
     let mounted = true;
@@ -38,30 +45,25 @@ export function Alerts({ t }) {
   const { data, fromCache, updatedAt } = state.payload;
   const tier = data.tier || "WARNING";
   const cfg = tierConfig[tier] || tierConfig.WARNING;
+  const TierIcon = cfg.icon;
   const alertTitle = data.title || t(`alerts.demo.${tier}.title`);
   const alertMessage = data.message || t(`alerts.demo.${tier}.message`);
   const alertAction = data.action_required || t(`alerts.demo.${tier}.action`);
-
-  async function sendSimulation() {
-    setDispatchState({ loading: true, payload: null, error: null });
-    try {
-      const payload = await dispatchAlert({
-        alert_id: data.alert_id,
-        tier: data.tier,
-        farmer_name: "Demo Farmer",
-        phone: "+84901234567",
-        channel: "sms",
-      });
-      setDispatchState({ loading: false, payload, error: null });
-    } catch (error) {
-      setDispatchState({ loading: false, payload: null, error });
-    }
-  }
-
-  const dispatchData = dispatchState.payload?.data;
+  const rainfallTier = data.rainfall_tier || "WATCH";
+  const rainfallCfg = rainfallTier === "WARNING" ? tierConfig.WARNING : tierConfig.WATCH;
+  const rainfallSeries =
+    data.rainfall_forecast && data.rainfall_forecast.length > 0
+      ? data.rainfall_forecast.map((d) => ({ label: d.label, mm: Number(d.mm) }))
+      : DEMO_RAINFALL;
 
   return (
     <div className="screen-stack">
+      <ScreenHeader
+        eyebrow={t("alerts.eyebrow")}
+        title={t("alerts.title")}
+        description={t("alerts.description")}
+      />
+
       {fromCache && <DataBanner>{t("common.staleData", { time: formatDateTime(updatedAt) })}</DataBanner>}
       {state.payload.demo && <DataBanner tone="info">{t("common.demoData")}</DataBanner>}
 
@@ -69,11 +71,13 @@ export function Alerts({ t }) {
       <div className="alert-card">
         <div className="alert-sev-bar" style={{ background: cfg.sevBg }} />
         <div className="alert-card-header">
-          <div className={`alert-icon-pulse ${tier.toLowerCase()}`}>{cfg.emoji}</div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 14, fontWeight: 700 }}>{alertTitle}</div>
-            <div style={{ fontSize: 11, color: "var(--text2)", marginTop: 2 }}>
-              {data.station} · {t("alerts.activeTier")}: {t(`tier.${tier}`)} · {fromCache ? formatDateTime(updatedAt) : "Live"}
+          <div className={`alert-icon-pulse ${tier.toLowerCase()}`}>
+            <TierIcon size={24} aria-hidden="true" />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 17, fontWeight: 800, letterSpacing: "-0.2px", color: cfg.color }}>{alertTitle}</div>
+            <div style={{ fontSize: 12, color: "var(--text2)", marginTop: 3 }}>
+              {data.station} · {t("alerts.activeTier")}: {t(`tier.${tier}`)} · {fromCache ? formatDateTime(updatedAt) : t("common.live")}
             </div>
           </div>
           <span className={`chip chip-${tier === "CRITICAL" ? "red" : tier === "WARNING" ? "amber" : "blue"}`}>
@@ -81,33 +85,30 @@ export function Alerts({ t }) {
           </span>
         </div>
         <div className="alert-card-body">
-          <p style={{ fontSize: 12, color: "var(--text2)", lineHeight: 1.6, marginBottom: 12 }}>
+          <p style={{ fontSize: 14, color: "var(--text2)", lineHeight: 1.6, marginBottom: 14 }}>
             {alertMessage}
           </p>
 
-          {/* Trigger reasons */}
-          {data.trigger_reasons && data.trigger_reasons.length > 0 && (
-            <>
-              <div className="section-title">{t("alerts.reasons")}</div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
-                {data.trigger_reasons.map((reason) => (
-                  <span key={reason} className="source-chip">{reason}</span>
-                ))}
-              </div>
-            </>
-          )}
-
           {/* Crop-specific tips */}
-          <div className="section-title">Crop-specific recommendations</div>
-          {cropTips.map((tip) => (
-            <div className="tip-item" key={tip.icon}>
-              <div className="tip-icon" style={{ background: tip.bg, color: tip.color }}>{tip.icon}</div>
-              <div>
-                <span style={{ fontWeight: 600, color: "var(--text)", fontSize: 12 }}>{tip.strong}</span>
-                <span style={{ fontSize: 12, color: "var(--text2)" }}>{tip.text}</span>
+          <div className="section-title">{t("alerts.cropTips")}</div>
+          {cropTips.map((tip) => {
+            const TipIcon = tip.icon;
+            return (
+              <div className="tip-item" key={tip.key}>
+                <div className="tip-icon" style={{ background: tip.bg, color: tip.color }}>
+                  <TipIcon size={18} aria-hidden="true" />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: 700, color: "var(--text)", fontSize: 14, marginBottom: 2 }}>
+                    {t(`alerts.tips.${tip.key}.strong`)}
+                  </div>
+                  <div style={{ fontSize: 13, color: "var(--text2)", lineHeight: 1.5 }}>
+                    {t(`alerts.tips.${tip.key}.text`)}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
 
           {/* Action required */}
           <div style={{ marginTop: 14, padding: "12px 14px", background: "var(--surface2)", borderRadius: 10, border: "1px solid var(--border2)" }}>
@@ -116,102 +117,28 @@ export function Alerts({ t }) {
             </div>
             <p style={{ fontSize: 12, color: "var(--text2)", lineHeight: 1.6 }}>{alertAction}</p>
           </div>
-
-          {/* SMS preview */}
-          <div className="section-title" style={{ marginTop: 14 }}>SMS alert preview</div>
-          <div className="sms-preview">
-            [FLOODGUARD] CANH BAO LU 72 GIO<br />
-            Song Mekong tai Tan Chau: 3.8m, dang tang<br />
-            Du kien nuoc ve: 68-74 gio<br />
-            Ruong lua (tro hat): XEM QUYET DINH THU HOACH<br />
-            Chi tiet: floodguard.vn/alert/2605<br />
-            Thu hoi ho tro: *1800 hoac app
-          </div>
         </div>
       </div>
 
       {/* 7-day rainfall watch card */}
       <div className="alert-card">
-        <div className="alert-sev-bar" style={{ background: "var(--blue)" }} />
+        <div className="alert-sev-bar" style={{ background: rainfallCfg.sevBg }} />
         <div className="alert-card-header">
-          <div style={{ fontSize: 22 }}>🔵</div>
+          <div className="inline-icon blue"><CloudRain size={20} aria-hidden="true" /></div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 14, fontWeight: 700 }}>7-day rainfall watch</div>
-            <div style={{ fontSize: 11, color: "var(--text2)", marginTop: 2 }}>
-              Regional forecast · NCHMF data
-            </div>
+            <div style={{ fontSize: 14, fontWeight: 700 }}>{t("alerts.rainfallWatch")}</div>
+            <div style={{ fontSize: 11, color: "var(--text2)", marginTop: 2 }}>{t("alerts.rainfallSource")}</div>
           </div>
-          <span className="chip chip-blue">Watch</span>
+          <span className={`chip chip-${rainfallTier === "WARNING" ? "amber" : "blue"}`}>
+            {t(`tier.${rainfallTier}`)}
+          </span>
         </div>
         <div className="alert-card-body">
-          <p style={{ fontSize: 12, color: "var(--text2)", lineHeight: 1.6 }}>
-            Above-average rainfall expected across the Upper Mekong basin for the next 7 days
-            (180–220mm vs seasonal avg 130mm). Combined with upstream dam releases, this significantly
-            increases flood probability in the Delta through the next fortnight.
-          </p>
+          <p style={{ fontSize: 12, color: "var(--text2)", lineHeight: 1.6 }}>{t("alerts.rainfallDesc")}</p>
           <div style={{ marginTop: 12 }}>
-            <div style={{ fontSize: 11, color: "var(--text2)", marginBottom: 6 }}>7-day rainfall forecast</div>
-            <RainfallMiniChart
-              data={[
-                { label: "T2", mm: 40 }, { label: "T3", mm: 55 },
-                { label: "T4", mm: 70 }, { label: "T5", mm: 90 },
-                { label: "T6", mm: 100 },{ label: "T7", mm: 65 },
-                { label: "CN", mm: 45 },
-              ]}
-              threshold={85}
-            />
+            <RainfallMiniChart data={rainfallSeries} threshold={85} />
           </div>
         </div>
-      </div>
-
-      {/* Data sources */}
-      <div className="card">
-        <div className="section-title">Alert data sources</div>
-        <div className="sources-table">
-          <div className="sources-row">
-            <span>River levels</span>
-            <span className="chip chip-green">NCHMF Live · 15 min refresh</span>
-          </div>
-          <div className="sources-row">
-            <span>Rainfall forecast</span>
-            <span className="chip chip-green">Mekong River Commission</span>
-          </div>
-          <div className="sources-row">
-            <span>Flood extent model</span>
-            <span className="chip chip-green">Copernicus EMS Satellite</span>
-          </div>
-          <div className="sources-row">
-            <span>Crop damage curves</span>
-            <span className="chip chip-green">IRRI Field Research Data</span>
-          </div>
-        </div>
-        <FreshnessChips freshness={data.source_freshness} t={t} />
-      </div>
-
-      {/* SMS Dispatch */}
-      <div className="card" style={{ borderColor: "rgba(0,201,123,0.2)" }}>
-        <div className="section-title">{t("alerts.dispatch")}</div>
-        <p style={{ fontSize: 12, color: "var(--text2)", marginBottom: 14 }}>{t("alerts.dispatchMode")}</p>
-        <button
-          type="button"
-          className="primary-action"
-          onClick={sendSimulation}
-          disabled={dispatchState.loading}
-        >
-          {dispatchState.loading ? t("common.loading") : t("alerts.dispatch")}
-        </button>
-        {dispatchData && (
-          <div style={{ marginTop: 12, padding: "12px 14px", background: "var(--surface2)", borderRadius: 10, border: "1px solid var(--border2)" }}>
-            <div style={{ fontSize: 12, color: "var(--green)", fontWeight: 600 }}>
-              {t(`alerts.status.${dispatchData.dispatch_status}`)} ·{" "}
-              {dispatchData.sms_sent ? t("common.ready") : t("alerts.status.simulated")}
-            </div>
-            {dispatchState.payload?.demo && (
-              <div style={{ fontSize: 11, color: "var(--text3)", marginTop: 4 }}>{t("alerts.demoDispatchDetail")}</div>
-            )}
-          </div>
-        )}
-        {dispatchState.error && <DataBanner tone="error">{t("alerts.dispatchFailed")}</DataBanner>}
       </div>
     </div>
   );
