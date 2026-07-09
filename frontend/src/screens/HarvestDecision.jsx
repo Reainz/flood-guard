@@ -6,7 +6,6 @@ import { useCountUp } from "../hooks/useCountUp.js";
 import { DataBanner, ScreenHeader } from "../components/SharedUI.jsx";
 import { getFloodStatus, postHarvestDecision } from "../services/api.js";
 import { LossBarChart } from "../components/charts/LossBarChart.jsx";
-import { CropStageTimeline } from "../components/charts/CropStageTimeline.jsx";
 
 const initialForm = {
   planting_date: "2026-02-03",
@@ -281,30 +280,19 @@ function HarvestResult({ data, t }) {
         />
       </div>
 
-      {/* Growth stage + Compensation */}
+      {/* Compensation — the growth-stage tracker now lives on the Harvest Timing screen */}
       <div className="card">
-        <div className="section-title">{t("harvest.stage")} &amp; {t("harvest.compensation")}</div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-          <div className="stat-card">
-            <div className="stat-label">{t("harvest.stage")}</div>
-            <div className="stat-num" style={{ fontSize: 15 }}>{data.growth_stage_vi || t("harvest.demoGrowthStage")}</div>
-            <div className="stat-label">{t("harvest.daysToHarvest")}: {data.days_to_harvest}</div>
+        <div className="section-title">{t("harvest.compensation")}</div>
+        <div className="stat-card">
+          <div className="stat-label">{t("harvest.compensation")}</div>
+          <div className="stat-num" style={{ color: "var(--green)", fontSize: 20 }}>
+            {compensation} <span style={{ fontSize: 13, fontWeight: 500 }}>{t("common.millionVnd")}</span>
           </div>
-          <div className="stat-card">
-            <div className="stat-label">{t("harvest.compensation")}</div>
-            <div className="stat-num" style={{ color: "var(--green)", fontSize: 20 }}>
-              {compensation} <span style={{ fontSize: 13, fontWeight: 500 }}>{t("common.millionVnd")}</span>
-            </div>
-            <div className="stat-label">{data.compensation.legal_basis || t("harvest.demoLegalBasis")}</div>
-          </div>
+          <div className="stat-label">{data.compensation.legal_basis || t("harvest.demoLegalBasis")}</div>
         </div>
-        <div style={{ marginTop: 12 }}>
-          <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 6 }}>{t("harvest.growthStageProgress")}</div>
-          <CropStageTimeline
-            currentStage={data.growth_stage || "grain_filling"}
-            stages={["seedling", "tillering", "panicle_initiation", "booting", "heading", "grain_filling", "maturity"]}
-          />
-        </div>
+        <p className="muted-line" style={{ marginTop: 10 }}>
+          {t("harvest.daysToHarvest")}: {data.days_to_harvest}
+        </p>
       </div>
 
       {/* Action steps */}

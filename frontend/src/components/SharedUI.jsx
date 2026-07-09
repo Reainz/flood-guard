@@ -61,3 +61,45 @@ export function ChecklistItem({ done, label, detail }) {
 export function SkeletonBlock({ className = "" }) {
   return <div className={`skeleton ${className}`} />;
 }
+
+/** Segmented control that switches between the screens inside one nav section. */
+export function SectionTabs({ tabs, active, onChange, ariaLabel }) {
+  if (!tabs || tabs.length < 2) return null;
+
+  const activeIdx = Math.max(0, tabs.findIndex((tab) => tab.key === active));
+
+  return (
+    <div className="section-tabs" role="tablist" aria-label={ariaLabel}>
+      <div
+        className="section-tabs-pill"
+        aria-hidden="true"
+        style={{
+          width: `calc((100% - 8px) / ${tabs.length})`,
+          transform: `translateX(calc(${activeIdx} * 100%))`,
+        }}
+      />
+      {tabs.map((tab) => (
+        <button
+          key={tab.key}
+          type="button"
+          role="tab"
+          aria-selected={tab.key === active}
+          className={`section-tab${tab.key === active ? " active" : ""}`}
+          onClick={() => onChange(tab.key)}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** Marks a screen whose contents are placeholder data rather than live results. */
+export function MockNotice({ children }) {
+  return (
+    <p className="mock-notice">
+      <span className="mock-notice-dot" aria-hidden="true" />
+      {children}
+    </p>
+  );
+}

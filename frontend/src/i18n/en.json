@@ -6,13 +6,8 @@
     "navigation": "Main navigation",
     "toggleTheme": "Toggle theme",
     "toggleLanguage": "Toggle language",
-    "logoAlt": "FloodGuard Vietnam logo"
-  },
-  "tabs": {
-    "dashboard": "Flood",
-    "harvest": "Harvest",
-    "alerts": "Alerts",
-    "proof": "Records"
+    "logoAlt": "FloodGuard Vietnam logo",
+    "sectionNavigation": "{section} screens"
   },
   "countdown": {
     "hours": "Hours",
@@ -33,7 +28,9 @@
     "ready": "Ready",
     "notReady": "Needs update",
     "items": "{count} items",
-    "live": "Live"
+    "live": "Live",
+    "placeholderScreen": "Placeholder screen — sample data, nothing is saved.",
+    "dateLocale": "en-GB"
   },
   "risk": {
     "LOW": "Low",
@@ -113,7 +110,6 @@
     "depth": "Predicted flood depth",
     "duration": "Flood duration (days)",
     "submit": "Calculate decision",
-    "stage": "Growth stage",
     "daysToHarvest": "Days to harvest",
     "recommended": "Recommended",
     "compensation": "Estimated support",
@@ -122,7 +118,6 @@
     "actionSteps": "Action steps",
     "lastResultKept": "Could not submit new request; previous result retained below.",
     "noActionSteps": "No additional steps.",
-    "demoGrowthStage": "Grain filling",
     "demoLegalBasis": "Demo data based on local support framework",
     "demoDeadline": "File within 15 days after damage confirmation",
     "scenarioComparison": "Scenario comparison — estimated crop loss",
@@ -132,7 +127,6 @@
     "exportPdfDesc": "Export your scenario analysis as PDF for loan officer or cooperative record",
     "exportPdf": "Export PDF",
     "pdfComingSoon": "PDF export will be available in the next version.",
-    "growthStageProgress": "Growth stage progress",
     "scenarioLabels": {
       "harvest_now": "Harvest now",
       "wait": "Wait for flood",
@@ -322,5 +316,249 @@
     "compensationFormula": "Based on: {area} ha x {loss}% loss x rice support rate ({rate} VND/ha for {band} loss).",
     "rateApplied": "Rate applied: Decree 02/2017/ND-CP, Annex I - rice, natural disaster category.",
     "evidenceChecklist": "GPS and evidence checklist"
+  },
+  "sections": {
+    "field": "Field",
+    "crop": "Crop",
+    "records": "Records",
+    "alerts": "Alerts"
+  },
+  "screens": {
+    "dashboard": "Flood",
+    "disease": "Disease",
+    "timing": "Timing",
+    "floodScenarios": "Scenarios",
+    "yieldPrediction": "Yield",
+    "variety": "Variety",
+    "activity": "Activity",
+    "proof": "Loss proof",
+    "alerts": "Alerts"
+  },
+  "months": {
+    "march": "March"
+  },
+  "disease": {
+    "eyebrow": "Crop health",
+    "title": "Disease detection",
+    "description": "Photograph an affected leaf to identify the disease and see treatment steps.",
+    "captureTitle": "Leaf photo",
+    "dropzoneTitle": "Take or upload a leaf photo",
+    "dropzoneHint": "Fill the frame with a single affected leaf, in daylight.",
+    "sampleFileName": "leaf_sample.jpg",
+    "retake": "Retake",
+    "analysing": "Analysing leaf",
+    "affectedArea": "About {pct}% of the leaf area shows symptoms",
+    "confidenceCaption": "confidence",
+    "confidenceAria": "Detection confidence {pct} percent",
+    "treatmentTitle": "Treatment steps",
+    "nearbyTitle": "Recently detected nearby",
+    "nearbyDesc": "Reports from other fields in An Giang over the past two weeks.",
+    "nearbyMeta": "{km} km away · {days} days ago",
+    "names": {
+      "leaf_blast": "Leaf blast",
+      "brown_spot": "Brown spot",
+      "sheath_blight": "Sheath blight"
+    },
+    "severity": {
+      "low": "Low severity",
+      "moderate": "Moderate severity",
+      "high": "High severity"
+    },
+    "descriptions": {
+      "leaf_blast": "Leaf blast is a fungal disease that spreads fastest in humid weather with heavy nitrogen use. Diamond-shaped lesions with grey centres spread from the lower leaves upward and can cut yield sharply if they reach the panicle."
+    },
+    "treatments": {
+      "isolate": {
+        "title": "Isolate the affected block",
+        "body": "Avoid walking from the affected block into healthy ones. Spores travel on wet clothing and tools."
+      },
+      "fungicide": {
+        "title": "Apply a tricyclazole fungicide",
+        "body": "Spray in the early morning while the leaves are still damp. Repeat after seven days if new lesions appear."
+      },
+      "drain": {
+        "title": "Drain the field for two days",
+        "body": "Lowering humidity in the canopy slows the spread. Re-flood once new lesions stop forming."
+      }
+    }
+  },
+  "timing": {
+    "eyebrow": "Harvest planning",
+    "title": "When to harvest",
+    "description": "A recommended harvest window based on crop stage, grain moisture, and the rainfall forecast.",
+    "windowTitle": "Recommended window — March",
+    "windowShort": "{from}–{to}",
+    "windowLong": "Harvest between {from} and {to} {month}",
+    "windowAria": "Recommended harvest window: day {from} to day {to} of March",
+    "today": "Today",
+    "floodOverlap": "Flood risk overlaps the tail of the window",
+    "legendWindow": "Recommended window",
+    "legendFlood": "Forecast flood risk",
+    "recommendation": "Recommendation",
+    "confidenceCaption": "confidence",
+    "confidenceAria": "Recommendation confidence {pct} percent",
+    "rationale": "Grain moisture reaches the 20–22% target around 18 March. Waiting past the 24th risks losing the crop to the forecast flood, and quality drops once the grain over-dries on the stalk.",
+    "factors": {
+      "grain_moisture": "Grain moisture",
+      "forecast_rainfall": "Forecast rain",
+      "stage_maturity": "Stage maturity"
+    },
+    "recalculate": "Recalculate",
+    "recalculating": "Recalculating",
+    "stageTitle": "Growth stage",
+    "stageDesc": "The crop is in grain filling. The window opens once it reaches maturity."
+  },
+  "yield": {
+    "eyebrow": "Season outlook",
+    "title": "Yield prediction",
+    "description": "Projected harvest for the current season, with a confidence range that narrows as harvest nears.",
+    "perHectare": "Estimated yield",
+    "totalHarvest": "Total harvest",
+    "vsLastSeason": "vs last season",
+    "tonnesPerHa": "t/ha",
+    "tonnes": "t",
+    "overArea": "over {area} ha",
+    "hectares": "{area} ha",
+    "trajectoryTitle": "Season trajectory",
+    "trajectoryDesc": "Solid line is what has been observed. The dashed tail is the projection.",
+    "trajectoryAria": "Season yield trajectory with confidence band",
+    "weekAxis": "week",
+    "legendObserved": "Observed",
+    "legendProjected": "Projected",
+    "legendBand": "{pct}% confidence range",
+    "byPlotTitle": "By plot",
+    "byPlotFootnote": "Trend compares each plot with its own result last season.",
+    "plots": {
+      "north": "North paddy",
+      "canal": "Canal-side paddy",
+      "south": "South paddy",
+      "lowland": "Lowland corner"
+    }
+  },
+  "variety": {
+    "eyebrow": "Before planting",
+    "title": "Rice variety advisor",
+    "description": "Answer three questions about your field to get a variety recommendation.",
+    "steps": {
+      "soil": "Soil type",
+      "context": "Region and season",
+      "priority": "What matters most"
+    },
+    "stepCount": "Step {step} of {total}",
+    "soilQuestion": "What is your soil like?",
+    "soils": {
+      "alluvial": "Alluvial",
+      "acid_sulfate": "Acid sulfate",
+      "saline": "Saline",
+      "sandy": "Sandy"
+    },
+    "soilHints": {
+      "alluvial": "Rich, river-deposited, holds water well",
+      "acid_sulfate": "Low pH, iron staining, common inland",
+      "saline": "Coastal, salt intrusion in dry season",
+      "sandy": "Drains fast, low organic matter"
+    },
+    "contextQuestion": "Where and when are you planting?",
+    "region": "Province",
+    "season": "Season",
+    "regions": {
+      "an_giang": "An Giang",
+      "dong_thap": "Dong Thap",
+      "can_tho": "Can Tho",
+      "kien_giang": "Kien Giang",
+      "soc_trang": "Soc Trang"
+    },
+    "seasons": {
+      "winter_spring": "Winter–Spring",
+      "summer_autumn": "Summer–Autumn",
+      "autumn_winter": "Autumn–Winter"
+    },
+    "priorityQuestion": "What matters most this season?",
+    "priorityHint": "This shifts which varieties score highest, not which are possible.",
+    "priorities": {
+      "yield": "Yield",
+      "flood_tolerance": "Flood tolerance",
+      "market_price": "Market price"
+    },
+    "back": "Back",
+    "next": "Next",
+    "findVariety": "Find my variety",
+    "matching": "Matching varieties",
+    "recommended": "Recommended variety",
+    "maturity": "{days}-day maturity",
+    "matchCaption": "match",
+    "matchAria": "Match score {pct} percent",
+    "varietyDescription": "OM5451 is the workhorse of the Mekong Delta: short-duration, high-yielding, and reliable on alluvial soil. Its long, slender grain has steady export demand, though it needs watching for blast in humid weather.",
+    "attributes": {
+      "yield_potential": "Yield potential",
+      "flood_tolerance": "Flood tolerance",
+      "pest_resistance": "Pest resistance",
+      "market_demand": "Market demand"
+    },
+    "alternatives": "Other good matches",
+    "matchPct": "{pct}% match",
+    "startOver": "Start over"
+  },
+  "activity": {
+    "eyebrow": "Field journal",
+    "title": "Activity log",
+    "description": "A running record of what happened in the field — disease, growth, spending, and notes.",
+    "timelineTitle": "Recent activity",
+    "dayTotal": "Spent: {amount} ₫",
+    "addEntry": "Add entry",
+    "close": "Close",
+    "entryType": "Entry type",
+    "date": "Date",
+    "note": "Note",
+    "notePlaceholder": "What happened in the field?",
+    "amount": "Amount (VND)",
+    "save": "Save entry",
+    "notPersisted": "This is a preview — entries are not saved when you reload.",
+    "todayLabel": "Today",
+    "types": {
+      "disease": "Disease",
+      "growth": "Growth",
+      "expense": "Expense",
+      "note": "Note"
+    },
+    "samples": {
+      "leaf_blast_spotted": {
+        "title": "Leaf blast spotted in the north paddy",
+        "body": "Grey lesions on the lower leaves across roughly a tenth of the block. Photographed and identified."
+      },
+      "fungicide_purchase": {
+        "title": "Bought tricyclazole fungicide",
+        "body": "Two bottles from the cooperative store, enough for one pass over the north paddy."
+      },
+      "grain_filling_start": {
+        "title": "Grain filling started",
+        "body": "Panicles are filling evenly. Day 89 since transplanting."
+      },
+      "fertiliser_top_dressing": {
+        "title": "Top-dressed with potash",
+        "body": "Applied ahead of the forecast rain so it works into the soil."
+      },
+      "canal_water_low": {
+        "title": "Canal water running low",
+        "body": "Level dropped about 15 cm this week. Pumping is slower than usual."
+      },
+      "heading_complete": {
+        "title": "Heading complete",
+        "body": "Panicles fully emerged across all four plots."
+      },
+      "labour_weeding": {
+        "title": "Hired labour for weeding",
+        "body": "Three workers for one day across the south paddy and lowland corner."
+      }
+    }
+  },
+  "stages": {
+    "seedling": "Seedling",
+    "tillering": "Tillering",
+    "panicle_initiation": "Panicle init.",
+    "booting": "Booting",
+    "heading": "Heading",
+    "grain_filling": "Grain filling",
+    "maturity": "Maturity"
   }
 }

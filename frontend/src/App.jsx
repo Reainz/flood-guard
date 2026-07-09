@@ -1,26 +1,47 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { Bell, ClipboardCheck, CloudRain, Globe, Moon, Sprout, Sun, Waves } from "lucide-react";
+import { Bell, ClipboardCheck, Globe, Moon, Sprout, Sun, Waves } from "lucide-react";
 
+import { ActivityLog } from "./screens/ActivityLog.jsx";
 import { Alerts } from "./screens/Alerts.jsx";
 import { Dashboard } from "./screens/Dashboard.jsx";
+import { DiseaseDetection } from "./screens/DiseaseDetection.jsx";
 import { HarvestDecision } from "./screens/HarvestDecision.jsx";
+import { HarvestTiming } from "./screens/HarvestTiming.jsx";
 import { LossProof } from "./screens/LossProof.jsx";
+import { VarietyAdvisor } from "./screens/VarietyAdvisor.jsx";
+import { YieldPrediction } from "./screens/YieldPrediction.jsx";
+import { SectionTabs } from "./components/SharedUI.jsx";
 import vi from "./i18n/vi.json";
 import en from "./i18n/en.json";
 import mm from "./i18n/mm.json";
 import "./styles.css";
+import "./styles/features.css";
 
 const translations = { en, vi, mm };
 
-const TAB_KEYS = ["dashboard", "harvest", "alerts", "proof"];
-
-const TAB_ICONS = {
-  dashboard: Waves,
-  harvest: Sprout,
-  alerts: Bell,
-  proof: ClipboardCheck,
+const SCREENS = {
+  dashboard: Dashboard,
+  disease: DiseaseDetection,
+  timing: HarvestTiming,
+  floodScenarios: HarvestDecision,
+  yieldPrediction: YieldPrediction,
+  variety: VarietyAdvisor,
+  activity: ActivityLog,
+  proof: LossProof,
+  alerts: Alerts,
 };
+
+const SECTIONS = [
+  { key: "field", icon: Waves, screens: ["dashboard", "disease"] },
+  { key: "crop", icon: Sprout, screens: ["timing", "floodScenarios", "yieldPrediction", "variety"] },
+  { key: "records", icon: ClipboardCheck, screens: ["activity", "proof"] },
+  { key: "alerts", icon: Bell, screens: ["alerts"], badge: "2" },
+];
+
+const DEFAULT_SCREENS = Object.fromEntries(
+  SECTIONS.map((section) => [section.key, section.screens[0]]),
+);
 
 function makeT(lang) {
   const strings = translations[lang] || translations.en;
@@ -37,7 +58,9 @@ const LANGS = ["vi", "en", "mm"];
 const LANG_CODES = { vi: "VI", en: "EN", mm: "MM" };
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const [activeSection, setActiveSection] = useState("field");
+  // Each section remembers the screen you last had open inside it.
+  const [screenBySection, setScreenBySection] = useState(DEFAULT_SCREENS);
   const [lang, setLang] = useState("vi");
   const [theme, setTheme] = useState("light");
 
@@ -51,6 +74,16 @@ export default function App() {
     }
   }, [theme]);
 
+  const section = SECTIONS.find((entry) => entry.key === activeSection) || SECTIONS[0];
+  const activeScreen = screenBySection[section.key];
+  const ActiveScreen = SCREENS[activeScreen];
+
+  const subTabs = section.screens.map((key) => ({ key, label: t(`screens.${key}`) }));
+
+  function selectScreen(key) {
+    setScreenBySection((current) => ({ ...current, [section.key]: key }));
+  }
+
   return (
     <div className="app-shell">
       <nav className="app-nav">
@@ -62,17 +95,17 @@ export default function App() {
         </div>
 
         <div className="nav-tabs" role="tablist" aria-label={t("app.navigation")}>
-          {TAB_KEYS.map((key) => (
+          {SECTIONS.map((entry) => (
             <button
-              key={key}
+              key={entry.key}
               type="button"
               role="tab"
-              aria-selected={activeTab === key}
-              className={activeTab === key ? "nav-tab active" : "nav-tab"}
-              onClick={() => setActiveTab(key)}
+              aria-selected={activeSection === entry.key}
+              className={activeSection === entry.key ? "nav-tab active" : "nav-tab"}
+              onClick={() => setActiveSection(entry.key)}
             >
-              {t(`tabs.${key}`)}
-              {key === "alerts" && <span className="nav-badge">2</span>}
+              {t(`sections.${entry.key}`)}
+              {entry.badge && <span className="nav-badge">{entry.badge}</span>}
             </button>
           ))}
         </div>
@@ -104,28 +137,34 @@ export default function App() {
       </nav>
 
       <div className="content-surface">
-        {activeTab === "dashboard" && <Dashboard t={t} />}
-        {activeTab === "harvest" && <HarvestDecision t={t} />}
-        {activeTab === "alerts" && <Alerts t={t} />}
-        {activeTab === "proof" && <LossProof t={t} />}
+        <SectionTabs
+          tabs={subTabs}
+          active={activeScreen}
+          onChange={selectScreen}
+          ariaLabel={t("app.sectionNavigation", { section: t(`sections.${section.key}`) })}
+        />
+        {/* Keying on the screen restarts the entry animation on every switch. */}
+        <div className="screen-swap" key={activeScreen}>
+          <ActiveScreen t={t} />
+        </div>
       </div>
 
       {/* Bottom navigation — visible on mobile via CSS */}
       <nav className="bottom-nav" role="tablist" aria-label={t("app.navigation")}>
-        {TAB_KEYS.map((key) => {
-          const Icon = TAB_ICONS[key];
+        {SECTIONS.map((entry) => {
+          const Icon = entry.icon;
           return (
             <button
-              key={key}
+              key={entry.key}
               type="button"
               role="tab"
-              aria-selected={activeTab === key}
-              className={`bottom-nav-tab${activeTab === key ? " active" : ""}`}
-              onClick={() => setActiveTab(key)}
+              aria-selected={activeSection === entry.key}
+              className={`bottom-nav-tab${activeSection === entry.key ? " active" : ""}`}
+              onClick={() => setActiveSection(entry.key)}
             >
-              {key === "alerts" && <span className="bottom-nav-badge">2</span>}
+              {entry.badge && <span className="bottom-nav-badge">{entry.badge}</span>}
               <Icon className="bottom-nav-tab-icon" size={22} aria-hidden="true" />
-              <span>{t(`tabs.${key}`)}</span>
+              <span>{t(`sections.${entry.key}`)}</span>
             </button>
           );
         })}

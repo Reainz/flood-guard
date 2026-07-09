@@ -12,12 +12,37 @@ This file covers frontend-specific rules only.
 
 ## Screen inventory
 
-| Screen | File | Purpose |
-|--------|------|---------|
-| Dashboard | `screens/Dashboard.jsx` | Flood status, countdown, river levels, map |
-| Harvest Decision | `screens/HarvestDecision.jsx` | Crop inputs + 3-scenario comparison |
-| Alerts | `screens/Alerts.jsx` | Active alerts + crop recommendations |
-| Loss Proof | `screens/LossProof.jsx` | Photo capture + damage form + compensation |
+Nine screens across four navigation sections. `App.jsx` owns the section → screen map.
+
+| Section | Screen | File | Backed by |
+|---------|--------|------|-----------|
+| Field | Dashboard | `screens/Dashboard.jsx` | API — flood status, countdown, river levels, map |
+| Field | Disease Detection | `screens/DiseaseDetection.jsx` | **Mock** — `mocks/disease.js` |
+| Crop | Harvest Timing | `screens/HarvestTiming.jsx` | **Mock** — `mocks/harvestTiming.js` |
+| Crop | Flood Scenarios | `screens/HarvestDecision.jsx` | API — crop inputs + 3-scenario comparison |
+| Crop | Yield Prediction | `screens/YieldPrediction.jsx` | **Mock** — `mocks/yieldPrediction.js` |
+| Crop | Variety Advisor | `screens/VarietyAdvisor.jsx` | **Mock** — `mocks/variety.js` |
+| Records | Activity Log | `screens/ActivityLog.jsx` | **Mock** — `mocks/activityLog.js` |
+| Records | Loss Proof | `screens/LossProof.jsx` | API — photo capture + damage form + compensation |
+| Alerts | Alerts | `screens/Alerts.jsx` | API — active alerts + crop recommendations |
+
+## Placeholder screens
+
+Five screens are visual placeholders: they read from `src/mocks/`, never call the API,
+and save nothing. Mock data lives in `mocks/` rather than behind `services/api.js` so
+the "no direct fetch" rule stays literally true and it is obvious which screens are
+not yet real. See `src/mocks/README.md`.
+
+When one of these gains a backend, move its data behind `services/api.js` and delete
+its mock module. Do not add mock data to `api.js`.
+
+## Styles
+
+- `styles.css` — design tokens, app shell, nav, shared primitives
+- `styles/features.css` — the five placeholder screens and the section sub-nav
+
+`App.jsx` imports `features.css` **after** `styles.css` so its card variants can
+override the `.card` base rule. Keep that order.
 
 ## UI rules
 
@@ -60,10 +85,11 @@ Never use `react-native-camera` — Expo SDK only.
 ## Adding a new screen
 
 1. Create `screens/NewScreen.jsx`
-2. Add any new strings to `i18n/vi.json`
-3. Add the route to `App.jsx` navigation
-4. Add any new API calls to `services/api.js`
-5. Write a Storybook story if time permits
+2. Add any new strings to `i18n/vi.json`, `en.json`, **and** `mm.json` — all three stay in sync
+3. Register the screen in `SCREENS` and add its key to a section in `SECTIONS` (`App.jsx`)
+4. Add a `screens.<key>` label to each locale file
+5. Add any new API calls to `services/api.js`
+6. Write a Storybook story if time permits
 
 ## Testing
 

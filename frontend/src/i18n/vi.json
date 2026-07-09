@@ -6,13 +6,8 @@
     "navigation": "Điều hướng chính",
     "toggleTheme": "Đổi giao diện sáng tối",
     "toggleLanguage": "Đổi ngôn ngữ",
-    "logoAlt": "Biểu trưng FloodGuard Việt Nam"
-  },
-  "tabs": {
-    "dashboard": "Lũ",
-    "harvest": "Thu hoạch",
-    "alerts": "Cảnh báo",
-    "proof": "Hồ sơ"
+    "logoAlt": "Biểu trưng FloodGuard Việt Nam",
+    "sectionNavigation": "Các màn hình {section}"
   },
   "countdown": {
     "hours": "Giờ",
@@ -33,7 +28,9 @@
     "ready": "Sẵn sàng",
     "notReady": "Cần bổ sung",
     "items": "{count} mục",
-    "live": "Trực tiếp"
+    "live": "Trực tiếp",
+    "placeholderScreen": "Màn hình mẫu — dữ liệu minh hoạ, không lưu gì cả.",
+    "dateLocale": "vi-VN"
   },
   "risk": {
     "LOW": "Thấp",
@@ -113,7 +110,6 @@
     "depth": "Độ sâu cm",
     "duration": "Số ngày ngập",
     "submit": "Tính quyết định",
-    "stage": "Giai đoạn cây",
     "daysToHarvest": "Ngày đến thu hoạch",
     "recommended": "Khuyến nghị",
     "compensation": "Hỗ trợ dự kiến",
@@ -122,7 +118,6 @@
     "actionSteps": "Bước thực hiện",
     "lastResultKept": "Không gửi được yêu cầu mới; vẫn giữ kết quả gần nhất bên dưới.",
     "noActionSteps": "Không có bước bổ sung.",
-    "demoGrowthStage": "Vào chắc - hạt đang chắc",
     "demoLegalBasis": "Dữ liệu demo theo khung hỗ trợ địa phương",
     "demoDeadline": "Nộp hồ sơ trong 15 ngày sau khi xác nhận thiệt hại",
     "scenarioComparison": "So sánh phương án — thiệt hại ước tính",
@@ -132,7 +127,6 @@
     "exportPdfDesc": "Xuất phân tích thành PDF cho hồ sơ hợp tác xã hoặc tổ chức tài chính",
     "exportPdf": "Xuất PDF",
     "pdfComingSoon": "Tính năng xuất PDF sẽ có trong phiên bản tiếp theo.",
-    "growthStageProgress": "Tiến độ sinh trưởng",
     "scenarioLabels": {
       "harvest_now": "Thu hoạch ngay",
       "wait": "Chờ lũ qua",
@@ -322,5 +316,249 @@
     "compensationFormula": "Căn cứ: {area} ha x thiệt hại {loss}% x mức hỗ trợ lúa ({rate} VND/ha cho nhóm thiệt hại {band}).",
     "rateApplied": "Mức áp dụng: Nghị định 02/2017/NĐ-CP, Phụ lục I - lúa, thiên tai.",
     "evidenceChecklist": "Danh sách GPS và bằng chứng"
+  },
+  "sections": {
+    "field": "Đồng ruộng",
+    "crop": "Mùa vụ",
+    "records": "Nhật ký",
+    "alerts": "Cảnh báo"
+  },
+  "screens": {
+    "dashboard": "Lũ",
+    "disease": "Sâu bệnh",
+    "timing": "Thời điểm",
+    "floodScenarios": "Phương án",
+    "yieldPrediction": "Năng suất",
+    "variety": "Giống lúa",
+    "activity": "Hoạt động",
+    "proof": "Hồ sơ",
+    "alerts": "Cảnh báo"
+  },
+  "months": {
+    "march": "tháng 3"
+  },
+  "disease": {
+    "eyebrow": "Sức khoẻ cây trồng",
+    "title": "Phát hiện sâu bệnh",
+    "description": "Chụp ảnh lá bị hại để nhận diện bệnh và xem các bước xử lý.",
+    "captureTitle": "Ảnh lá lúa",
+    "dropzoneTitle": "Chụp hoặc tải ảnh lá lúa",
+    "dropzoneHint": "Chụp cận một lá bị hại, dưới ánh sáng ban ngày.",
+    "sampleFileName": "anh_la.jpg",
+    "retake": "Chụp lại",
+    "analysing": "Đang phân tích lá",
+    "affectedArea": "Khoảng {pct}% diện tích lá có triệu chứng",
+    "confidenceCaption": "độ tin cậy",
+    "confidenceAria": "Độ tin cậy nhận diện {pct} phần trăm",
+    "treatmentTitle": "Các bước xử lý",
+    "nearbyTitle": "Ghi nhận gần đây quanh vùng",
+    "nearbyDesc": "Báo cáo từ các ruộng khác ở An Giang trong hai tuần qua.",
+    "nearbyMeta": "cách {km} km · {days} ngày trước",
+    "names": {
+      "leaf_blast": "Đạo ôn lá",
+      "brown_spot": "Đốm nâu",
+      "sheath_blight": "Khô vằn"
+    },
+    "severity": {
+      "low": "Mức độ nhẹ",
+      "moderate": "Mức độ trung bình",
+      "high": "Mức độ nặng"
+    },
+    "descriptions": {
+      "leaf_blast": "Đạo ôn lá là bệnh nấm, lây lan nhanh nhất khi ẩm cao và bón nhiều đạm. Vết bệnh hình thoi với tâm màu xám lan dần từ lá dưới lên trên, có thể giảm mạnh năng suất nếu lên tới bông."
+    },
+    "treatments": {
+      "isolate": {
+        "title": "Cách ly khu ruộng bị bệnh",
+        "body": "Không đi từ khu bị bệnh sang khu còn khoẻ. Bào tử bám theo quần áo ướt và dụng cụ."
+      },
+      "fungicide": {
+        "title": "Phun thuốc gốc tricyclazole",
+        "body": "Phun vào sáng sớm khi lá còn ẩm. Lặp lại sau bảy ngày nếu xuất hiện vết bệnh mới."
+      },
+      "drain": {
+        "title": "Rút nước ruộng hai ngày",
+        "body": "Giảm ẩm trong tán lá sẽ làm chậm lây lan. Cho nước vào lại khi không còn vết bệnh mới."
+      }
+    }
+  },
+  "timing": {
+    "eyebrow": "Kế hoạch thu hoạch",
+    "title": "Thu hoạch khi nào",
+    "description": "Khung thời gian thu hoạch đề xuất dựa trên giai đoạn cây, độ ẩm hạt và dự báo mưa.",
+    "windowTitle": "Khung đề xuất — tháng 3",
+    "windowShort": "{from}–{to}",
+    "windowLong": "Thu hoạch từ ngày {from} đến {to} {month}",
+    "windowAria": "Khung thu hoạch đề xuất: ngày {from} đến ngày {to} tháng 3",
+    "today": "Hôm nay",
+    "floodOverlap": "Nguy cơ lũ trùng cuối khung",
+    "legendWindow": "Khung đề xuất",
+    "legendFlood": "Nguy cơ lũ dự báo",
+    "recommendation": "Khuyến nghị",
+    "confidenceCaption": "độ tin cậy",
+    "confidenceAria": "Độ tin cậy khuyến nghị {pct} phần trăm",
+    "rationale": "Độ ẩm hạt đạt mức 20–22% vào khoảng ngày 18/3. Chờ qua ngày 24 có nguy cơ mất mùa vì lũ dự báo, còn để lúa khô quá trên bông thì chất lượng giảm.",
+    "factors": {
+      "grain_moisture": "Độ ẩm hạt",
+      "forecast_rainfall": "Mưa dự báo",
+      "stage_maturity": "Độ chín"
+    },
+    "recalculate": "Tính lại",
+    "recalculating": "Đang tính lại",
+    "stageTitle": "Giai đoạn cây",
+    "stageDesc": "Lúa đang vào chắc. Khung thu hoạch mở khi lúa chín."
+  },
+  "yield": {
+    "eyebrow": "Triển vọng mùa vụ",
+    "title": "Dự báo năng suất",
+    "description": "Sản lượng dự kiến của vụ này, kèm khoảng tin cậy thu hẹp dần khi tới ngày thu hoạch.",
+    "perHectare": "Năng suất ước tính",
+    "totalHarvest": "Tổng sản lượng",
+    "vsLastSeason": "so với vụ trước",
+    "tonnesPerHa": "tấn/ha",
+    "tonnes": "tấn",
+    "overArea": "trên {area} ha",
+    "hectares": "{area} ha",
+    "trajectoryTitle": "Diễn biến cả vụ",
+    "trajectoryDesc": "Đường liền là số liệu đã quan sát. Đoạn nét đứt là dự báo.",
+    "trajectoryAria": "Diễn biến năng suất cả vụ kèm khoảng tin cậy",
+    "weekAxis": "tuần",
+    "legendObserved": "Đã quan sát",
+    "legendProjected": "Dự báo",
+    "legendBand": "Khoảng tin cậy {pct}%",
+    "byPlotTitle": "Theo thửa",
+    "byPlotFootnote": "Xu hướng so sánh mỗi thửa với kết quả của chính nó vụ trước.",
+    "plots": {
+      "north": "Thửa Bắc",
+      "canal": "Thửa ven kênh",
+      "south": "Thửa Nam",
+      "lowland": "Góc trũng"
+    }
+  },
+  "variety": {
+    "eyebrow": "Trước khi gieo sạ",
+    "title": "Tư vấn giống lúa",
+    "description": "Trả lời ba câu hỏi về ruộng của bạn để nhận gợi ý giống lúa.",
+    "steps": {
+      "soil": "Loại đất",
+      "context": "Vùng và vụ",
+      "priority": "Ưu tiên"
+    },
+    "stepCount": "Bước {step}/{total}",
+    "soilQuestion": "Đất ruộng của bạn thế nào?",
+    "soils": {
+      "alluvial": "Phù sa",
+      "acid_sulfate": "Phèn",
+      "saline": "Nhiễm mặn",
+      "sandy": "Đất cát"
+    },
+    "soilHints": {
+      "alluvial": "Màu mỡ, do sông bồi, giữ nước tốt",
+      "acid_sulfate": "pH thấp, có váng sắt, phổ biến vùng trong",
+      "saline": "Ven biển, mặn xâm nhập mùa khô",
+      "sandy": "Thoát nước nhanh, ít mùn"
+    },
+    "contextQuestion": "Bạn gieo sạ ở đâu và vào vụ nào?",
+    "region": "Tỉnh",
+    "season": "Vụ",
+    "regions": {
+      "an_giang": "An Giang",
+      "dong_thap": "Đồng Tháp",
+      "can_tho": "Cần Thơ",
+      "kien_giang": "Kiên Giang",
+      "soc_trang": "Sóc Trăng"
+    },
+    "seasons": {
+      "winter_spring": "Đông Xuân",
+      "summer_autumn": "Hè Thu",
+      "autumn_winter": "Thu Đông"
+    },
+    "priorityQuestion": "Vụ này bạn ưu tiên điều gì?",
+    "priorityHint": "Lựa chọn này đổi thứ hạng giống, không loại bỏ giống nào.",
+    "priorities": {
+      "yield": "Năng suất",
+      "flood_tolerance": "Chịu lũ",
+      "market_price": "Giá bán"
+    },
+    "back": "Quay lại",
+    "next": "Tiếp",
+    "findVariety": "Tìm giống phù hợp",
+    "matching": "Đang so khớp giống lúa",
+    "recommended": "Giống đề xuất",
+    "maturity": "Chín {days} ngày",
+    "matchCaption": "phù hợp",
+    "matchAria": "Điểm phù hợp {pct} phần trăm",
+    "varietyDescription": "OM5451 là giống chủ lực của Đồng bằng sông Cửu Long: ngắn ngày, năng suất cao, ổn định trên đất phù sa. Hạt dài, thon, nhu cầu xuất khẩu đều, nhưng cần theo dõi đạo ôn khi trời ẩm.",
+    "attributes": {
+      "yield_potential": "Tiềm năng năng suất",
+      "flood_tolerance": "Khả năng chịu lũ",
+      "pest_resistance": "Kháng sâu bệnh",
+      "market_demand": "Nhu cầu thị trường"
+    },
+    "alternatives": "Giống phù hợp khác",
+    "matchPct": "Phù hợp {pct}%",
+    "startOver": "Làm lại từ đầu"
+  },
+  "activity": {
+    "eyebrow": "Nhật ký đồng ruộng",
+    "title": "Sổ hoạt động",
+    "description": "Ghi chép liên tục những gì xảy ra trên ruộng — sâu bệnh, sinh trưởng, chi phí và ghi chú.",
+    "timelineTitle": "Hoạt động gần đây",
+    "dayTotal": "Chi: {amount} ₫",
+    "addEntry": "Thêm ghi chép",
+    "close": "Đóng",
+    "entryType": "Loại ghi chép",
+    "date": "Ngày",
+    "note": "Ghi chú",
+    "notePlaceholder": "Hôm nay ruộng có gì?",
+    "amount": "Số tiền (VND)",
+    "save": "Lưu ghi chép",
+    "notPersisted": "Đây là bản xem thử — ghi chép không được lưu khi tải lại trang.",
+    "todayLabel": "Hôm nay",
+    "types": {
+      "disease": "Sâu bệnh",
+      "growth": "Sinh trưởng",
+      "expense": "Chi phí",
+      "note": "Ghi chú"
+    },
+    "samples": {
+      "leaf_blast_spotted": {
+        "title": "Phát hiện đạo ôn ở thửa Bắc",
+        "body": "Vết xám trên lá dưới, khoảng một phần mười khu ruộng. Đã chụp ảnh và nhận diện."
+      },
+      "fungicide_purchase": {
+        "title": "Mua thuốc trị đạo ôn tricyclazole",
+        "body": "Hai chai ở cửa hàng hợp tác xã, đủ phun một lượt thửa Bắc."
+      },
+      "grain_filling_start": {
+        "title": "Bắt đầu vào chắc",
+        "body": "Bông vào chắc đều. Ngày thứ 89 sau khi cấy."
+      },
+      "fertiliser_top_dressing": {
+        "title": "Bón thúc kali",
+        "body": "Bón trước cơn mưa dự báo để phân ngấm vào đất."
+      },
+      "canal_water_low": {
+        "title": "Nước kênh xuống thấp",
+        "body": "Mực nước giảm khoảng 15 cm tuần này. Bơm chậm hơn thường lệ."
+      },
+      "heading_complete": {
+        "title": "Trỗ xong",
+        "body": "Bông đã trỗ hết trên cả bốn thửa."
+      },
+      "labour_weeding": {
+        "title": "Thuê công làm cỏ",
+        "body": "Ba người trong một ngày cho thửa Nam và góc trũng."
+      }
+    }
+  },
+  "stages": {
+    "seedling": "Mạ non",
+    "tillering": "Đẻ nhánh",
+    "panicle_initiation": "Làm đòng",
+    "booting": "Trỗ bông",
+    "heading": "Trỗ",
+    "grain_filling": "Vào chắc",
+    "maturity": "Chín"
   }
 }

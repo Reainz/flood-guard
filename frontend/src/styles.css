@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
 
+/* This file owns tokens, shell, nav, and the shared primitives. The five
+   placeholder screens carry their own stylesheet, `styles/features.css`, which
+   App.jsx imports immediately after this one so its card variants can override
+   the `.card` base rule below. */
+
 :root {
   /* Paddy field palette — green stalks, golden grain */
   --green:        #5C840C;  /* paddy green (primary brand) */

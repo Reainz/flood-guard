@@ -1,5 +1,6 @@
 import React from "react";
 
+// Fallback for callers that predate the `t` prop. Prefer passing `t`.
 const STAGE_VI = {
   seedling:           "Mạ non",
   tillering:          "Đẻ nhánh",
@@ -10,12 +11,14 @@ const STAGE_VI = {
   maturity:           "Chín",
 };
 
-export function CropStageTimeline({ currentStage, stages }) {
+export function CropStageTimeline({ currentStage, stages, t }) {
   const activeIdx = stages.indexOf(currentStage);
+  const stageLabel = (stage) => (t ? t(`stages.${stage}`) : STAGE_VI[stage] || stage);
 
   return (
     <div style={{ overflowX: "auto", paddingBottom: 4 }}>
-      <div style={{ display: "flex", alignItems: "flex-start", minWidth: 320, position: "relative" }}>
+      {/* 280px keeps all seven labels inside a card at a 360px viewport. */}
+      <div style={{ display: "flex", alignItems: "flex-start", minWidth: 280, position: "relative" }}>
         <div style={{
           position: "absolute",
           top: 10,
@@ -54,7 +57,7 @@ export function CropStageTimeline({ currentStage, stages }) {
                 textAlign: "center",
                 lineHeight: 1.2,
               }}>
-                {STAGE_VI[stage] || stage}
+                {stageLabel(stage)}
               </div>
             </div>
           );
