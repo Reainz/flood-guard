@@ -27,6 +27,7 @@ frontend/.vite/
 .playwright-mcp/
 .claude/
 .idea/
+.remember/
 
 # OS noise
 .DS_Store
