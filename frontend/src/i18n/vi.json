@@ -7,7 +7,12 @@
     "toggleTheme": "Đổi giao diện sáng tối",
     "toggleLanguage": "Đổi ngôn ngữ",
     "logoAlt": "Biểu trưng FloodGuard Việt Nam",
-    "sectionNavigation": "Các màn hình {section}"
+    "sectionNavigation": "Các màn hình {section}",
+    "toggleDataSource": "Chuyển giữa dữ liệu mẫu và dữ liệu thật",
+    "demoMode": "Mẫu",
+    "liveMode": "Thật",
+    "demoModeHint": "Dữ liệu mẫu — không cần máy chủ. Bấm để dùng dữ liệu thật.",
+    "liveModeHint": "Dữ liệu thật từ máy chủ. Bấm để dùng dữ liệu mẫu."
   },
   "countdown": {
     "hours": "Giờ",

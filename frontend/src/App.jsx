@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { Bell, ClipboardCheck, Globe, Moon, Sprout, Sun, Waves } from "lucide-react";
+import { Bell, ClipboardCheck, Database, FlaskConical, Globe, Moon, Sprout, Sun, Waves } from "lucide-react";
 
 import { ActivityLog } from "./screens/ActivityLog.jsx";
 import { Alerts } from "./screens/Alerts.jsx";
@@ -12,6 +12,7 @@ import { LossProof } from "./screens/LossProof.jsx";
 import { VarietyAdvisor } from "./screens/VarietyAdvisor.jsx";
 import { YieldPrediction } from "./screens/YieldPrediction.jsx";
 import { SectionTabs } from "./components/SharedUI.jsx";
+import { DEMO, LIVE, getDataSource, setDataSource } from "./services/dataSource.js";
 import vi from "./i18n/vi.json";
 import en from "./i18n/en.json";
 import mm from "./i18n/mm.json";
@@ -63,8 +64,14 @@ export default function App() {
   const [screenBySection, setScreenBySection] = useState(DEFAULT_SCREENS);
   const [lang, setLang] = useState("vi");
   const [theme, setTheme] = useState("light");
+  const [dataSource, setDataSourceState] = useState(getDataSource);
 
   const t = makeT(lang);
+  const demoMode = dataSource === DEMO;
+
+  function toggleDataSource() {
+    setDataSourceState(setDataSource(demoMode ? LIVE : DEMO));
+  }
 
   useEffect(() => {
     if (theme === "dark") {
@@ -113,6 +120,18 @@ export default function App() {
         <div className="nav-right">
           <button
             type="button"
+            className={`nav-data-btn${demoMode ? " demo" : ""}`}
+            onClick={toggleDataSource}
+            aria-label={t("app.toggleDataSource")}
+            title={t(demoMode ? "app.demoModeHint" : "app.liveModeHint")}
+          >
+            {demoMode
+              ? <FlaskConical size={14} aria-hidden="true" />
+              : <Database size={14} aria-hidden="true" />}
+            <span>{t(demoMode ? "app.demoMode" : "app.liveMode")}</span>
+          </button>
+          <button
+            type="button"
             className="nav-icon-btn"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             aria-label={t("app.toggleTheme")}
@@ -143,8 +162,10 @@ export default function App() {
           onChange={selectScreen}
           ariaLabel={t("app.sectionNavigation", { section: t(`sections.${section.key}`) })}
         />
-        {/* Keying on the screen restarts the entry animation on every switch. */}
-        <div className="screen-swap" key={activeScreen}>
+        {/* Keying on the screen restarts the entry animation on every switch.
+            Keying on the data source too remounts the screen so it refetches
+            when you flip between live and demo. */}
+        <div className="screen-swap" key={`${activeScreen}-${dataSource}`}>
           <ActiveScreen t={t} />
         </div>
       </div>

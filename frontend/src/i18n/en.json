@@ -7,7 +7,12 @@
     "toggleTheme": "Toggle theme",
     "toggleLanguage": "Toggle language",
     "logoAlt": "FloodGuard Vietnam logo",
-    "sectionNavigation": "{section} screens"
+    "sectionNavigation": "{section} screens",
+    "toggleDataSource": "Switch between demo and live data",
+    "demoMode": "Demo",
+    "liveMode": "Live",
+    "demoModeHint": "Demo data — no backend needed. Click for live data.",
+    "liveModeHint": "Live data from the backend. Click for demo data."
   },
   "countdown": {
     "hours": "Hours",

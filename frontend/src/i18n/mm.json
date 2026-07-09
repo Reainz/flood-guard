@@ -7,7 +7,12 @@
     "toggleTheme": "အပြင်အဆင်ပြောင်းရန်",
     "toggleLanguage": "ဘာသာစကားပြောင်းရန်",
     "logoAlt": "FloodGuard ဗီယက်နမ် လိုဂို",
-    "sectionNavigation": "{section} စခရင်များ"
+    "sectionNavigation": "{section} စခရင်များ",
+    "toggleDataSource": "နမူနာဒေတာနှင့် တကယ့်ဒေတာ ပြောင်းရန်",
+    "demoMode": "နမူနာ",
+    "liveMode": "တကယ်",
+    "demoModeHint": "နမူနာဒေတာ — ဆာဗာ မလိုပါ။ တကယ့်ဒေတာအတွက် နှိပ်ပါ။",
+    "liveModeHint": "ဆာဗာမှ တကယ့်ဒေတာ။ နမူနာဒေတာအတွက် နှိပ်ပါ။"
   },
   "countdown": {
     "hours": "နာရီ",

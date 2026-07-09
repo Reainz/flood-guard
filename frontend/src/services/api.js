@@ -1,3 +1,5 @@
+import { DEMO_LATENCY_MS, isDemoMode } from "./dataSource.js";
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 const REQUEST_TIMEOUT_MS = 4000;
 
@@ -5,8 +7,30 @@ export function apiUrl(path) {
   return `${BASE_URL}${path}`;
 }
 
+function delay(ms) {
+  return new Promise((resolve) => { window.setTimeout(resolve, ms); });
+}
+
 async function requestJson(endpoint, options = {}, fallbackFactory = null) {
   const cacheKey = `fg_cache_${endpoint.replace(/[^a-z0-9]/gi, "_")}`;
+
+  // Demo mode short-circuits before the network and before the cache, so the
+  // result never depends on what a previous live session happened to store.
+  if (isDemoMode()) {
+    if (!fallbackFactory) {
+      throw new Error(`No demo payload for ${endpoint}`);
+    }
+    await delay(DEMO_LATENCY_MS);
+    return {
+      data: fallbackFactory(),
+      updatedAt: new Date().toISOString(),
+      fromCache: false,
+      // Not `demo: true` — that flag means "the backend failed and we coped".
+      // In demo mode nothing failed, so the screens show no warning banner.
+      mock: true,
+    };
+  }
+
   try {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);

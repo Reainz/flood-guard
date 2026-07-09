@@ -26,6 +26,33 @@ Nine screens across four navigation sections. `App.jsx` owns the section → scr
 | Records | Loss Proof | `screens/LossProof.jsx` | API — photo capture + damage form + compensation |
 | Alerts | Alerts | `screens/Alerts.jsx` | API — active alerts + crop recommendations |
 
+## Data source: demo vs live
+
+`services/dataSource.js` holds an app-wide mode, persisted to `localStorage` under
+`fg_data_source`. The pill in the nav toggles it.
+
+- **`demo`** (the default) — `requestJson` returns the demo payloads in `api.js`
+  directly, after a 550 ms delay so skeleton loaders still appear. No `fetch`, no
+  read or write of the response cache. Nothing can fail, which is the point: the app
+  presents without a backend.
+- **`live`** — the original path. Hit the backend, fall back to the response cache,
+  then to the demo payload, exactly as before.
+
+The mode lives in a plain module, not React state: `api.js` sits below the UI layer
+and may not import from it. Flipping the mode remounts the active screen (`App.jsx`
+keys on it), which makes the screen refetch.
+
+Two flags distinguish the cases, and screens must keep treating them differently:
+
+| Flag | Meaning | Screen shows |
+|------|---------|--------------|
+| `mock: true` | Demo mode. Nothing failed. | no banner |
+| `demo: true` | Live mode, backend unreachable, coped. | "backend not responding" banner |
+| `fromCache: true` | Live mode, served from the last good response. | stale-data banner |
+
+Adding an endpoint means adding its demo payload factory too, otherwise it throws in
+demo mode. That is deliberate — a screen that cannot be demoed should fail loudly.
+
 ## Placeholder screens
 
 Five screens are visual placeholders: they read from `src/mocks/`, never call the API,

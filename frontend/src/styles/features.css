@@ -62,6 +62,39 @@
   to   { opacity: 1; }
 }
 
+/* ── DATA SOURCE PILL ─────────────────────────────────────────────────────── */
+.nav-data-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 11px;
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  background: var(--surface2);
+  color: var(--text2);
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+}
+
+.nav-data-btn:hover { color: var(--text); border-color: var(--text3); }
+
+.nav-data-btn.demo {
+  border-color: var(--amber);
+  background: var(--amber-dim);
+  color: var(--amber);
+}
+
+@media (max-width: 560px) {
+  /* The label goes; the icon and its colour still say which mode is on. */
+  .nav-data-btn span { display: none; }
+  .nav-data-btn { padding: 7px 9px; }
+}
+
 /* ── MOCK NOTICE ──────────────────────────────────────────────────────────── */
 .mock-notice {
   display: flex;
