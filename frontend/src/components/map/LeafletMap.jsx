@@ -11,7 +11,13 @@ async function getLeaflet() {
 
 const RISK_COLORS = { LOW: "#00C97B", MODERATE: "#D97706", HIGH: "#DC2626", CRITICAL: "#7F1D1D" };
 
-export default function LeafletMap({ lat, lon, riskLevel, stationName }) {
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (ch) => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]
+  ));
+}
+
+export default function LeafletMap({ lat, lon, riskLevel, stationName, label = "Your field" }) {
   const containerRef = useRef(null);
   const mapRef       = useRef(null);
 
@@ -34,7 +40,7 @@ export default function LeafletMap({ lat, lon, riskLevel, stationName }) {
         className: "",
       });
       leaflet.marker([lat, lon], { icon })
-             .bindPopup(`<strong>Your field</strong><br>${stationName || ""}`)
+             .bindPopup(`<strong>${escapeHtml(label)}</strong><br>${escapeHtml(stationName || "")}`)
              .addTo(map);
 
       mapRef.current = map;
@@ -44,7 +50,7 @@ export default function LeafletMap({ lat, lon, riskLevel, stationName }) {
       cancelled = true;
       if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; }
     };
-  }, [lat, lon, riskLevel, stationName]);
+  }, [lat, lon, riskLevel, stationName, label]);
 
   return <div ref={containerRef} style={{ height: 200, borderRadius: 12, overflow: "hidden" }} />;
 }

@@ -20,11 +20,29 @@ const TYPE_ICONS = {
 };
 
 const FOCUSABLE = 'button, input, select, textarea, [href], [tabindex]:not([tabindex="-1"])';
+const STORAGE_KEY = "fg_activity_entries";
+
+function loadEntries() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : ENTRIES;
+  } catch {
+    return ENTRIES;
+  }
+}
 
 export function ActivityLog({ t }) {
-  const [entries, setEntries] = useState(ENTRIES);
+  const [entries, setEntries] = useState(loadEntries);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [freshId, setFreshId] = useState(null);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    } catch {
+      // Non-fatal: entries still show for this session.
+    }
+  }, [entries]);
 
   function addEntry(entry) {
     setEntries((current) => [entry, ...current]);
@@ -257,7 +275,7 @@ function EntrySheet({ t, onClose, onSave }) {
         <button type="button" className="btn btn-primary btn-full" onClick={save}>
           {t("activity.save")}
         </button>
-        <p className="sheet-footnote">{t("activity.notPersisted")}</p>
+        <p className="sheet-footnote">{t("activity.savedOnDevice")}</p>
       </div>
     </div>
   );

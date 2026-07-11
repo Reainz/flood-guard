@@ -8,11 +8,15 @@
     "toggleLanguage": "Toggle language",
     "logoAlt": "FloodGuard Vietnam logo",
     "sectionNavigation": "{section} screens",
-    "toggleDataSource": "Switch between demo and live data",
-    "demoMode": "Demo",
-    "liveMode": "Live",
     "demoModeHint": "Demo data — no backend needed. Click for live data.",
-    "liveModeHint": "Live data from the backend. Click for demo data."
+    "liveModeHint": "Live data from the backend. Click for demo data.",
+    "settings": "Settings",
+    "defaultLocation": "Mekong Delta",
+    "restartOnboarding": "Restart guided setup",
+    "demoModeLabel": "Switch to live data",
+    "liveModeLabel": "Switch to demo data",
+    "hideSidebar": "Hide sidebar",
+    "showSidebar": "Show sidebar"
   },
   "countdown": {
     "hours": "Hours",
@@ -34,8 +38,10 @@
     "notReady": "Needs update",
     "items": "{count} items",
     "live": "Live",
-    "placeholderScreen": "Placeholder screen — sample data, nothing is saved.",
-    "dateLocale": "en-GB"
+    "placeholderScreen": "Preview feature — showing sample results while we finish connecting live data.",
+    "dateLocale": "en-GB",
+    "comingSoon": "Coming soon",
+    "previewBadge": "Preview — sample data"
   },
   "risk": {
     "LOW": "Low",
@@ -95,16 +101,15 @@
     "depthStatFootnote": "Forecast-based estimate",
     "riskLevelLabel": "Risk level",
     "floodRiskGauge": "Flood Risk",
-    "mapLoading": "Loading map"
+    "mapLoading": "Loading map",
+    "yourField": "Your field"
   },
   "harvest": {
     "eyebrow": "Crop decision",
     "title": "Harvest option comparison",
     "description": "Enter field information and flood conditions to choose the lowest-loss option.",
     "cropDetails": "Crop information",
-    "fieldDetails": "Field information",
     "floodDetails": "Expected flood conditions",
-    "prefillReady": "Flood conditions pre-filled from the flood screen.",
     "prefillLoading": "Fetching latest flood conditions.",
     "prefillFailed": "Could not fetch latest flood conditions; using demo values.",
     "plantingDate": "Planting date",
@@ -152,7 +157,20 @@
       "daysToFlood": "Days to flood must be between 1 and 21.",
       "depth": "Depth must be between 10 and 200 cm.",
       "duration": "Flood duration must be between 1 and 30 days."
-    }
+    },
+    "back": "Back",
+    "next": "Next",
+    "steps": {
+      "basics": "Field basics",
+      "conditions": "Flood conditions",
+      "results": "Results"
+    },
+    "stepCount": "Step {step} of {total}",
+    "predictedConditions": "Predicted flood conditions",
+    "daysValue": "{days} days",
+    "advancedToggle": "I have more accurate local information",
+    "seeCalculation": "See how this is calculated",
+    "startOver": "Start over"
   },
   "crops": {
     "rice": "Rice",
@@ -320,13 +338,29 @@
     },
     "compensationFormula": "Based on: {area} ha x {loss}% loss x rice support rate ({rate} VND/ha for {band} loss).",
     "rateApplied": "Rate applied: Decree 02/2017/ND-CP, Annex I - rice, natural disaster category.",
-    "evidenceChecklist": "GPS and evidence checklist"
+    "evidenceChecklist": "GPS and evidence checklist",
+    "steps": {
+      "photos": "Photos",
+      "details": "Details",
+      "review": "Review"
+    },
+    "stepCount": "Step {step} of {total}",
+    "back": "Back",
+    "next": "Next",
+    "requiredPhotoProgress": "{count} of {total} required photos added",
+    "fieldIdPlaceholder": "e.g. AG-045-012",
+    "fieldIdHint": "Ask your cooperative if you're not sure of your field ID.",
+    "newReport": "File another report"
   },
   "sections": {
-    "field": "Field",
-    "crop": "Crop",
-    "records": "Records",
-    "alerts": "Alerts"
+    "alerts": "Alerts",
+    "dashboard": "Dashboard",
+    "floodSupport": "Flood Support",
+    "riceMonitoring": "Rice Monitoring",
+    "dashboardShort": "Home",
+    "floodSupportShort": "Flood",
+    "riceMonitoringShort": "Rice",
+    "alertsShort": "Alerts"
   },
   "screens": {
     "dashboard": "Flood",
@@ -335,7 +369,7 @@
     "floodScenarios": "Scenarios",
     "yieldPrediction": "Yield",
     "variety": "Variety",
-    "activity": "Activity",
+    "activity": "Field Log",
     "proof": "Loss proof",
     "alerts": "Alerts"
   },
@@ -506,7 +540,7 @@
   },
   "activity": {
     "eyebrow": "Field journal",
-    "title": "Activity log",
+    "title": "Field log",
     "description": "A running record of what happened in the field — disease, growth, spending, and notes.",
     "timelineTitle": "Recent activity",
     "dayTotal": "Spent: {amount} ₫",
@@ -518,7 +552,6 @@
     "notePlaceholder": "What happened in the field?",
     "amount": "Amount (VND)",
     "save": "Save entry",
-    "notPersisted": "This is a preview — entries are not saved when you reload.",
     "todayLabel": "Today",
     "types": {
       "disease": "Disease",
@@ -555,7 +588,8 @@
         "title": "Hired labour for weeding",
         "body": "Three workers for one day across the south paddy and lowland corner."
       }
-    }
+    },
+    "savedOnDevice": "Saved on this device."
   },
   "stages": {
     "seedling": "Seedling",
@@ -565,5 +599,34 @@
     "heading": "Heading",
     "grain_filling": "Grain filling",
     "maturity": "Maturity"
+  },
+  "onboarding": {
+    "steps": {
+      "language": "Language",
+      "field": "Your field",
+      "done": "Done"
+    },
+    "stepCount": "Step {step} of {total}",
+    "languageQuestion": "Choose your language",
+    "tagline": "FloodGuard turns flood forecasts into harvest decisions, so you know when to bring in your crop before water arrives.",
+    "continue": "Continue",
+    "back": "Back",
+    "fieldQuestion": "Tell us about your field",
+    "farmerName": "Your name",
+    "farmerNamePlaceholder": "e.g. Nguyen Van A",
+    "province": "Province / area",
+    "provincePlaceholder": "e.g. An Giang",
+    "useLocation": "Use my current location",
+    "locating": "Getting your location…",
+    "locationCaptured": "Location captured.",
+    "locationSkip": "No problem — you can add this later.",
+    "crop": "Main crop",
+    "area": "Field area (ha)",
+    "plantingDate": "Planting date",
+    "skip": "Skip for now",
+    "doneTitle": "You're all set",
+    "doneBody": "We'll use this to personalize flood alerts and harvest recommendations for your field.",
+    "enter": "Enter FloodGuard",
+    "notSet": "Not set"
   }
 }

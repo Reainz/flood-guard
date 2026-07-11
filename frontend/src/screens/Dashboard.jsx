@@ -132,6 +132,7 @@ export function Dashboard({ t }) {
               lon={parseFloat(localStorage.getItem("fg_field_lon") || "105.12")}
               riskLevel={risk}
               stationName={data.river.station}
+              label={t("dashboard.yourField")}
             />
           </Suspense>
           <div className="map-legend-overlay">

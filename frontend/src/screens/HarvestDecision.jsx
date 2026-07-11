@@ -3,19 +3,25 @@ import { useEffect, useState } from "react";
 import { FileText } from "lucide-react";
 import { useCountUp } from "../hooks/useCountUp.js";
 
-import { DataBanner, ScreenHeader } from "../components/SharedUI.jsx";
+import { DataBanner, MetricCard, ScreenHeader, WizardActions, WizardProgress } from "../components/SharedUI.jsx";
 import { getFloodStatus, postHarvestDecision } from "../services/api.js";
+import { getProfile } from "../services/profile.js";
 import { LossBarChart } from "../components/charts/LossBarChart.jsx";
 
-const initialForm = {
-  planting_date: "2026-02-03",
-  crop_type: "rice",
-  field_area_ha: 2.4,
-  elevation: "medium",
-  days_to_flood: 3,
-  predicted_flood_depth_cm: 65,
-  predicted_flood_duration_days: 5,
-};
+const STEP_KEYS = ["basics", "conditions", "results"];
+
+function buildInitialForm() {
+  const profile = getProfile();
+  return {
+    planting_date: profile.plantingDate || "2026-02-03",
+    crop_type: profile.cropType || "rice",
+    field_area_ha: profile.fieldArea || 2.4,
+    elevation: "medium",
+    days_to_flood: 3,
+    predicted_flood_depth_cm: 65,
+    predicted_flood_duration_days: 5,
+  };
+}
 
 const scenarioCfgs = [
   { label: "Harvest now",         bg: "rgba(0,201,123,0.08)",   border: "#00C97B", tc: "#00C97B", sc: "rgba(0,201,123,0.6)" },
@@ -30,10 +36,12 @@ function scenarioLabel(label, t) {
 }
 
 export function HarvestDecision({ t }) {
-  const [form, setForm] = useState(initialForm);
-  const [errors, setErrors] = useState({});
+  const [step, setStep] = useState(0);
+  const [form, setForm] = useState(buildInitialForm);
+  const [touched, setTouched] = useState({});
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [state, setState] = useState({ loading: false, payload: null, error: null });
-  const [prefillState, setPrefillState] = useState({ loading: true, fromCache: false, updatedAt: null, error: false });
+  const [prefillState, setPrefillState] = useState({ loading: true, error: false });
   const plantingDateRef = React.useRef(null);
 
   useEffect(() => {
@@ -49,26 +57,29 @@ export function HarvestDecision({ t }) {
           predicted_flood_depth_cm: Math.min(150, Math.max(10, Math.round(payload.data.prediction.predicted_depth_cm))),
           predicted_flood_duration_days: Math.min(14, Math.max(1, payload.data.prediction.predicted_duration_days)),
         }));
-        setPrefillState({ loading: false, fromCache: payload.fromCache || payload.data.cached, updatedAt: payload.updatedAt, error: false });
+        setPrefillState({ loading: false, error: false });
       })
-      .catch(() => mounted && setPrefillState({ loading: false, fromCache: false, updatedAt: null, error: true }));
+      .catch(() => mounted && setPrefillState({ loading: false, error: true }));
     return () => { mounted = false; };
   }, []);
 
+  const errors = validateHarvest(form, t);
   const data = state.payload?.data;
 
   function update(name, value) {
     setForm((current) => ({ ...current, [name]: value }));
-    setErrors((current) => { const next = { ...current }; delete next[name]; return next; });
+    setTouched((current) => ({ ...current, [name]: true }));
+  }
+
+  function fieldError(name) {
+    return touched[name] ? errors[name] : undefined;
   }
 
   function openPlantingDatePicker() {
     const input = plantingDateRef.current;
     if (!input) return;
-
     input.focus({ preventScroll: true });
     if (typeof input.showPicker !== "function") return;
-
     try {
       input.showPicker();
     } catch {
@@ -76,11 +87,9 @@ export function HarvestDecision({ t }) {
     }
   }
 
-  async function submit(event) {
-    event.preventDefault();
-    const nextErrors = validateHarvest(form, t);
-    setErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0) return;
+  async function submit() {
+    setTouched({ planting_date: true, field_area_ha: true, predicted_flood_depth_cm: true, predicted_flood_duration_days: true, days_to_flood: true });
+    if (Object.keys(errors).length > 0) return;
     setState((current) => ({ ...current, loading: true, error: null }));
     try {
       const payload = await postHarvestDecision({
@@ -91,10 +100,40 @@ export function HarvestDecision({ t }) {
         predicted_flood_duration_days: Number(form.predicted_flood_duration_days),
       });
       setState({ loading: false, payload, error: null });
+      setStep(2);
     } catch (error) {
       setState((current) => ({ loading: false, payload: current.payload, error }));
     }
   }
+
+  function restart() {
+    setStep(0);
+    setForm(buildInitialForm());
+    setTouched({});
+    setShowAdvanced(false);
+    setState({ loading: false, payload: null, error: null });
+  }
+
+  const basicsInvalid = Boolean(errors.planting_date || errors.field_area_ha);
+  const conditionsInvalid = Boolean(
+    errors.predicted_flood_depth_cm || errors.predicted_flood_duration_days || errors.days_to_flood,
+  );
+
+  const conditionsBanner = prefillState.error
+    ? { tone: "offline", text: t("harvest.prefillFailed") }
+    : prefillState.loading
+    ? { tone: "offline", text: t("harvest.prefillLoading") }
+    : null;
+
+  const resultsBanner = state.error && !data
+    ? { tone: "error", text: t("common.loadError") }
+    : state.error && data
+    ? { tone: "error", text: t("harvest.lastResultKept") }
+    : state.payload?.fromCache
+    ? { tone: "offline", text: t("common.staleData", { time: formatDateTime(state.payload.updatedAt) }) }
+    : state.payload?.demo
+    ? { tone: "info", text: t("common.demoData") }
+    : null;
 
   return (
     <div className="screen-stack">
@@ -104,142 +143,148 @@ export function HarvestDecision({ t }) {
         description={t("harvest.description")}
       />
 
-      {/* Banners */}
-      {state.payload?.fromCache && <DataBanner>{t("common.staleData", { time: formatDateTime(state.payload.updatedAt) })}</DataBanner>}
-      {state.payload?.demo && <DataBanner tone="info">{t("common.demoData")}</DataBanner>}
-      {state.error && data && <DataBanner tone="error">{t("harvest.lastResultKept")}</DataBanner>}
-      {state.error && !data && <DataBanner tone="error">{t("common.loadError")}</DataBanner>}
-      {prefillState.loading && <DataBanner>{t("harvest.prefillLoading")}</DataBanner>}
-      {prefillState.error && <DataBanner>{t("harvest.prefillFailed")}</DataBanner>}
-      {!prefillState.loading && !prefillState.error && !prefillState.fromCache && (
-        <DataBanner tone="info">{t("harvest.prefillReady")}</DataBanner>
+      {step < 2 && (
+        <div className="card">
+          <WizardProgress
+            stepLabel={t(`harvest.steps.${STEP_KEYS[step]}`)}
+            stepIndex={step}
+            totalSteps={STEP_KEYS.length}
+            countLabel={t("harvest.stepCount", { step: step + 1, total: STEP_KEYS.length })}
+          />
+
+          <div className="wizard-step" key={step}>
+            {step === 0 && (
+              <BasicsStep t={t} form={form} update={update} fieldError={fieldError} openPlantingDatePicker={openPlantingDatePicker} plantingDateRef={plantingDateRef} />
+            )}
+            {step === 1 && (
+              <ConditionsStep
+                t={t}
+                form={form}
+                update={update}
+                fieldError={fieldError}
+                banner={conditionsBanner}
+                showAdvanced={showAdvanced}
+                setShowAdvanced={setShowAdvanced}
+              />
+            )}
+          </div>
+
+          <WizardActions
+            onBack={() => setStep(step - 1)}
+            onNext={step === 1 ? submit : () => setStep(step + 1)}
+            backLabel={t("harvest.back")}
+            nextLabel={step === 1 ? (state.loading ? t("common.loading") : t("harvest.submit")) : t("harvest.next")}
+            backDisabled={step === 0}
+            nextDisabled={step === 0 ? basicsInvalid : conditionsInvalid || state.loading}
+          />
+        </div>
       )}
 
-      {/* Inputs */}
-      <div className="card">
-        <div className="section-title">{t("harvest.cropDetails")} &amp; {t("harvest.fieldDetails")}</div>
+      {step === 2 && data && <HarvestResult data={data} t={t} banner={resultsBanner} onRestart={restart} />}
+    </div>
+  );
+}
 
-        <div className="field-row">
-          <label htmlFor="harvest-crop">{t("harvest.crop")}</label>
-          <select
-            id="harvest-crop"
-            value={form.crop_type}
-            onChange={(e) => update("crop_type", e.target.value)}
-          >
-            <option value="rice">{t("crops.rice")}</option>
-            <option value="vegetables">{t("crops.vegetable")}</option>
-            <option value="fruit_trees">{t("crops.others")}</option>
-          </select>
-        </div>
+function BasicsStep({ t, form, update, fieldError, openPlantingDatePicker, plantingDateRef }) {
+  return (
+    <fieldset className="wizard-fieldset">
+      <legend className="section-title">{t("harvest.cropDetails")}</legend>
 
-        <div className="field-row">
-          <label htmlFor="harvest-planting-date" onClick={openPlantingDatePicker}>
-            {t("harvest.plantingDate")}
-          </label>
-          <input
-            id="harvest-planting-date"
-            ref={plantingDateRef}
-            className="date-picker-input"
-            type="date"
-            value={form.planting_date}
-            onClick={openPlantingDatePicker}
-            onChange={(e) => update("planting_date", e.target.value)}
-          />
-          {errors.planting_date && <small className="field-error">{errors.planting_date}</small>}
-        </div>
+      <div className="field-row">
+        <label htmlFor="harvest-crop">{t("harvest.crop")}</label>
+        <select id="harvest-crop" value={form.crop_type} onChange={(e) => update("crop_type", e.target.value)}>
+          <option value="rice">{t("crops.rice")}</option>
+          <option value="vegetables">{t("crops.vegetable")}</option>
+          <option value="fruit_trees">{t("crops.others")}</option>
+        </select>
+      </div>
 
-        <div style={{ height: 1, background: "var(--border)", margin: "14px 0" }} />
-        <div className="section-title">{t("harvest.floodDetails")}</div>
+      <div className="field-row">
+        <label htmlFor="harvest-planting-date" onClick={openPlantingDatePicker}>
+          {t("harvest.plantingDate")}
+        </label>
+        <input
+          id="harvest-planting-date"
+          ref={plantingDateRef}
+          className="date-picker-input"
+          type="date"
+          value={form.planting_date}
+          onClick={openPlantingDatePicker}
+          onChange={(e) => update("planting_date", e.target.value)}
+        />
+        {fieldError("planting_date") && <small className="field-error">{fieldError("planting_date")}</small>}
+      </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-          <div>
-            <label style={{ fontSize: 12, color: "var(--text2)", display: "block", marginBottom: 4 }}>
-              {t("harvest.depth")}
-            </label>
+      <div className="field-row">
+        <label>{t("harvest.area")}</label>
+        <input
+          type="number"
+          min="0.1" max="100" step="0.1"
+          value={form.field_area_ha}
+          onChange={(e) => update("field_area_ha", e.target.value)}
+        />
+        {fieldError("field_area_ha") && <small className="field-error">{fieldError("field_area_ha")}</small>}
+      </div>
+    </fieldset>
+  );
+}
+
+function ConditionsStep({ t, form, update, fieldError, banner, showAdvanced, setShowAdvanced }) {
+  return (
+    <fieldset className="wizard-fieldset">
+      <legend className="section-title">{t("harvest.predictedConditions")}</legend>
+
+      {banner && <DataBanner tone={banner.tone}>{banner.text}</DataBanner>}
+
+      <div className="metric-grid">
+        <MetricCard label={t("harvest.depth")} value={`${form.predicted_flood_depth_cm} cm`} />
+        <MetricCard label={t("harvest.duration")} value={t("harvest.daysValue", { days: form.predicted_flood_duration_days })} />
+        <MetricCard label={t("harvest.daysToFlood")} value={t("harvest.daysValue", { days: form.days_to_flood })} />
+      </div>
+
+      <details className="disclosure" open={showAdvanced} onToggle={(e) => setShowAdvanced(e.target.open)}>
+        <summary>{t("harvest.advancedToggle")}</summary>
+        <div className="disclosure-body">
+          <div className="field-row">
+            <label>{t("harvest.depth")}</label>
             <div className="damage-slider-row">
               <input
-                type="range"
-                min="10" max="150" step="10"
+                type="range" min="10" max="150" step="10"
                 value={form.predicted_flood_depth_cm}
                 onChange={(e) => update("predicted_flood_depth_cm", e.target.value)}
                 style={{ flex: 1 }}
               />
               <span className="damage-pct">{form.predicted_flood_depth_cm}cm</span>
             </div>
-            {errors.predicted_flood_depth_cm && <small className="field-error">{errors.predicted_flood_depth_cm}</small>}
+            {fieldError("predicted_flood_depth_cm") && <small className="field-error">{fieldError("predicted_flood_depth_cm")}</small>}
           </div>
-          <div>
-            <label style={{ fontSize: 12, color: "var(--text2)", display: "block", marginBottom: 4 }}>
-              {t("harvest.duration")}
-            </label>
+          <div className="field-row">
+            <label>{t("harvest.duration")}</label>
             <div className="damage-slider-row">
               <input
-                type="range"
-                min="1" max="14" step="1"
+                type="range" min="1" max="14" step="1"
                 value={form.predicted_flood_duration_days}
                 onChange={(e) => update("predicted_flood_duration_days", e.target.value)}
                 style={{ flex: 1 }}
               />
               <span className="damage-pct">{form.predicted_flood_duration_days}d</span>
             </div>
-            {errors.predicted_flood_duration_days && <small className="field-error">{errors.predicted_flood_duration_days}</small>}
-          </div>
-          <div>
-            <label style={{ fontSize: 12, color: "var(--text2)", display: "block", marginBottom: 4 }}>
-              {t("harvest.area")}
-            </label>
-            <input
-              type="number"
-              min="0.1" max="100" step="0.1"
-              value={form.field_area_ha}
-              onChange={(e) => update("field_area_ha", e.target.value)}
-            />
-            {errors.field_area_ha && <small className="field-error">{errors.field_area_ha}</small>}
+            {fieldError("predicted_flood_duration_days") && <small className="field-error">{fieldError("predicted_flood_duration_days")}</small>}
           </div>
         </div>
-
-        <button
-          type="button"
-          className="btn btn-primary btn-full"
-          style={{ marginTop: 14 }}
-          disabled={state.loading}
-          onClick={submit}
-        >
-          {state.loading ? t("common.loading") : t("harvest.submit")}
-        </button>
-      </div>
-
-      {/* Results */}
-      {data && <HarvestResult data={data} t={t} />}
-
-      {/* Export hint */}
-      <div className="card" style={{ background: "rgba(59,130,246,0.05)", borderColor: "rgba(59,130,246,0.2)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div className="inline-icon blue"><FileText size={20} aria-hidden="true" /></div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "var(--blue)" }}>{t("harvest.saveReport")}</div>
-            <div style={{ fontSize: 11, color: "var(--text2)", marginTop: 2 }}>{t("harvest.exportPdfDesc")}</div>
-          </div>
-          <button
-            type="button"
-            className="btn btn-ghost"
-            style={{ fontSize: 12, padding: "7px 12px", flexShrink: 0 }}
-            onClick={() => alert(t("harvest.pdfComingSoon"))}
-          >
-            {t("harvest.exportPdf")}
-          </button>
-        </div>
-      </div>
-    </div>
+      </details>
+    </fieldset>
   );
 }
 
-function HarvestResult({ data, t }) {
+function HarvestResult({ data, t, banner, onRestart }) {
   const scenarios = data.scenarios || [];
   const compensation = formatMillion(data.compensation.compensation_million_vnd);
 
   return (
     <div className="screen-stack">
+      {banner && <DataBanner tone={banner.tone}>{banner.text}</DataBanner>}
+
       {/* Scenario comparison */}
       <div className="card">
         <div className="section-title">{t("harvest.scenarioComparison")}</div>
@@ -251,7 +296,6 @@ function HarvestResult({ data, t }) {
           })}
         </div>
 
-        {/* Recommendation panel */}
         {scenarios.find((s) => s.is_recommended) && (() => {
           const best = scenarios.find((s) => s.is_recommended);
           const bestIdx = scenarios.indexOf(best);
@@ -280,7 +324,7 @@ function HarvestResult({ data, t }) {
         />
       </div>
 
-      {/* Compensation — the growth-stage tracker now lives on the Harvest Timing screen */}
+      {/* Compensation */}
       <div className="card">
         <div className="section-title">{t("harvest.compensation")}</div>
         <div className="stat-card">
@@ -288,11 +332,18 @@ function HarvestResult({ data, t }) {
           <div className="stat-num" style={{ color: "var(--green)", fontSize: 20 }}>
             {compensation} <span style={{ fontSize: 13, fontWeight: 500 }}>{t("common.millionVnd")}</span>
           </div>
-          <div className="stat-label">{data.compensation.legal_basis || t("harvest.demoLegalBasis")}</div>
         </div>
         <p className="muted-line" style={{ marginTop: 10 }}>
           {t("harvest.daysToHarvest")}: {data.days_to_harvest}
         </p>
+        <details className="disclosure">
+          <summary>{t("harvest.seeCalculation")}</summary>
+          <div className="disclosure-body">
+            <p style={{ fontSize: 12, color: "var(--text2)", lineHeight: 1.6 }}>
+              {data.compensation.legal_basis || t("harvest.demoLegalBasis")}
+            </p>
+          </div>
+        </details>
       </div>
 
       {/* Action steps */}
@@ -326,6 +377,27 @@ function HarvestResult({ data, t }) {
           {t("common.dataSources")}: {data.data_sources.join(" | ")}
         </p>
       </div>
+
+      {/* Export */}
+      <div className="card" style={{ background: "rgba(59,130,246,0.05)", borderColor: "rgba(59,130,246,0.2)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div className="inline-icon blue"><FileText size={20} aria-hidden="true" /></div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "var(--blue)" }}>{t("harvest.saveReport")}</div>
+            <div style={{ fontSize: 11, color: "var(--text2)", marginTop: 2 }}>{t("harvest.exportPdfDesc")}</div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4, flexShrink: 0 }}>
+            <button type="button" className="btn btn-ghost" style={{ fontSize: 12, padding: "7px 12px" }} disabled title={t("harvest.pdfComingSoon")}>
+              {t("harvest.exportPdf")}
+            </button>
+            <span className="chip chip-amber" style={{ fontSize: 10, padding: "2px 8px" }}>{t("common.comingSoon")}</span>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" className="btn btn-ghost btn-full" onClick={onRestart}>
+        {t("harvest.startOver")}
+      </button>
     </div>
   );
 }

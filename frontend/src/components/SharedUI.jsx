@@ -1,4 +1,5 @@
 import React from "react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export function ScreenHeader({ eyebrow, title, description }) {
   return (
@@ -62,8 +63,11 @@ export function SkeletonBlock({ className = "" }) {
   return <div className={`skeleton ${className}`} />;
 }
 
-/** Segmented control that switches between the screens inside one nav section. */
-export function SectionTabs({ tabs, active, onChange, ariaLabel }) {
+/** Segmented control that switches between the screens inside one nav section.
+ *  Tabs whose screen is still a mock/placeholder (`tab.mock`) carry a small
+ *  amber dot so it's clear at the nav level, not just inside the screen, which
+ *  ones show sample data. */
+export function SectionTabs({ tabs, active, onChange, ariaLabel, previewLabel }) {
   if (!tabs || tabs.length < 2) return null;
 
   const activeIdx = Math.max(0, tabs.findIndex((tab) => tab.key === active));
@@ -88,8 +92,56 @@ export function SectionTabs({ tabs, active, onChange, ariaLabel }) {
           onClick={() => onChange(tab.key)}
         >
           {tab.label}
+          {tab.mock && (
+            <span className="section-tab-preview-dot" aria-hidden="true" title={previewLabel} />
+          )}
         </button>
       ))}
+    </div>
+  );
+}
+
+/** Step progress rail shared by every multi-step wizard flow (Variety Advisor,
+ *  Onboarding, Harvest Decision, Loss Proof). */
+export function WizardProgress({ stepLabel, stepIndex, totalSteps, countLabel }) {
+  return (
+    <div className="progress-rail">
+      <div className="progress-rail-track" aria-hidden="true">
+        <div className="progress-rail-fill" style={{ width: `${((stepIndex + 1) / totalSteps) * 100}%` }} />
+      </div>
+      <div className="progress-rail-meta">
+        <span className="eyebrow">{stepLabel}</span>
+        <span className="progress-rail-count">{countLabel}</span>
+      </div>
+    </div>
+  );
+}
+
+/** Back/next button row shared by every multi-step wizard flow. */
+export function WizardActions({
+  onBack,
+  onNext,
+  backLabel,
+  nextLabel,
+  backDisabled = false,
+  nextDisabled = false,
+  nextType = "button",
+}) {
+  return (
+    <div className="wizard-actions">
+      <button
+        type="button"
+        className="btn btn-ghost"
+        onClick={onBack}
+        disabled={backDisabled}
+      >
+        <ArrowLeft size={14} aria-hidden="true" />
+        {backLabel}
+      </button>
+      <button type={nextType} className="btn btn-primary" onClick={nextType === "button" ? onNext : undefined} disabled={nextDisabled}>
+        {nextLabel}
+        <ArrowRight size={14} aria-hidden="true" />
+      </button>
     </div>
   );
 }

@@ -8,11 +8,15 @@
     "toggleLanguage": "Đổi ngôn ngữ",
     "logoAlt": "Biểu trưng FloodGuard Việt Nam",
     "sectionNavigation": "Các màn hình {section}",
-    "toggleDataSource": "Chuyển giữa dữ liệu mẫu và dữ liệu thật",
-    "demoMode": "Mẫu",
-    "liveMode": "Thật",
     "demoModeHint": "Dữ liệu mẫu — không cần máy chủ. Bấm để dùng dữ liệu thật.",
-    "liveModeHint": "Dữ liệu thật từ máy chủ. Bấm để dùng dữ liệu mẫu."
+    "liveModeHint": "Dữ liệu thật từ máy chủ. Bấm để dùng dữ liệu mẫu.",
+    "settings": "Cài đặt",
+    "defaultLocation": "Đồng bằng sông Cửu Long",
+    "restartOnboarding": "Thiết lập lại hướng dẫn ban đầu",
+    "demoModeLabel": "Chuyển sang dữ liệu thật",
+    "liveModeLabel": "Chuyển sang dữ liệu mẫu",
+    "hideSidebar": "Ẩn thanh bên",
+    "showSidebar": "Hiện thanh bên"
   },
   "countdown": {
     "hours": "Giờ",
@@ -34,8 +38,10 @@
     "notReady": "Cần bổ sung",
     "items": "{count} mục",
     "live": "Trực tiếp",
-    "placeholderScreen": "Màn hình mẫu — dữ liệu minh hoạ, không lưu gì cả.",
-    "dateLocale": "vi-VN"
+    "placeholderScreen": "Tính năng xem trước — hiển thị kết quả mẫu trong khi chúng tôi hoàn thiện kết nối dữ liệu thật.",
+    "dateLocale": "vi-VN",
+    "comingSoon": "Sắp ra mắt",
+    "previewBadge": "Bản xem trước — dữ liệu mẫu"
   },
   "risk": {
     "LOW": "Thấp",
@@ -95,16 +101,15 @@
     "depthStatFootnote": "Ước tính theo dự báo",
     "riskLevelLabel": "Mức rủi ro",
     "floodRiskGauge": "Rủi ro lũ",
-    "mapLoading": "Đang tải bản đồ"
+    "mapLoading": "Đang tải bản đồ",
+    "yourField": "Ruộng của bạn"
   },
   "harvest": {
     "eyebrow": "Quyết định mùa vụ",
     "title": "So sánh phương án thu hoạch",
     "description": "Nhập thông tin ruộng và điều kiện lũ để chọn phương án thiệt hại thấp nhất.",
     "cropDetails": "Thông tin cây trồng",
-    "fieldDetails": "Thông tin ruộng",
     "floodDetails": "Điều kiện lũ dự kiến",
-    "prefillReady": "Đã điền điều kiện lũ từ màn hình lũ.",
     "prefillLoading": "Đang lấy điều kiện lũ mới nhất.",
     "prefillFailed": "Không lấy được điều kiện lũ mới nhất; đang dùng giá trị demo.",
     "plantingDate": "Ngày gieo sạ",
@@ -152,7 +157,20 @@
       "daysToFlood": "Số ngày trước lũ phải từ 1 đến 21.",
       "depth": "Độ sâu phải từ 10 đến 200 cm.",
       "duration": "Số ngày ngập phải từ 1 đến 30."
-    }
+    },
+    "back": "Quay lại",
+    "next": "Tiếp theo",
+    "steps": {
+      "basics": "Thông tin ruộng",
+      "conditions": "Điều kiện lũ",
+      "results": "Kết quả"
+    },
+    "stepCount": "Bước {step}/{total}",
+    "predictedConditions": "Điều kiện lũ dự báo",
+    "daysValue": "{days} ngày",
+    "advancedToggle": "Tôi có thông tin chính xác hơn tại địa phương",
+    "seeCalculation": "Xem cách tính",
+    "startOver": "Làm lại từ đầu"
   },
   "crops": {
     "rice": "Lúa",
@@ -320,13 +338,29 @@
     },
     "compensationFormula": "Căn cứ: {area} ha x thiệt hại {loss}% x mức hỗ trợ lúa ({rate} VND/ha cho nhóm thiệt hại {band}).",
     "rateApplied": "Mức áp dụng: Nghị định 02/2017/NĐ-CP, Phụ lục I - lúa, thiên tai.",
-    "evidenceChecklist": "Danh sách GPS và bằng chứng"
+    "evidenceChecklist": "Danh sách GPS và bằng chứng",
+    "steps": {
+      "photos": "Ảnh",
+      "details": "Chi tiết",
+      "review": "Xem lại"
+    },
+    "stepCount": "Bước {step}/{total}",
+    "back": "Quay lại",
+    "next": "Tiếp theo",
+    "requiredPhotoProgress": "Đã thêm {count}/{total} ảnh bắt buộc",
+    "fieldIdPlaceholder": "VD: AG-045-012",
+    "fieldIdHint": "Hỏi hợp tác xã nếu bạn không chắc mã số ruộng.",
+    "newReport": "Lập báo cáo khác"
   },
   "sections": {
-    "field": "Đồng ruộng",
-    "crop": "Mùa vụ",
-    "records": "Nhật ký",
-    "alerts": "Cảnh báo"
+    "alerts": "Cảnh báo",
+    "dashboard": "Trang chủ",
+    "floodSupport": "Hỗ trợ lũ",
+    "riceMonitoring": "Theo dõi lúa",
+    "dashboardShort": "Trang chủ",
+    "floodSupportShort": "Hỗ trợ lũ",
+    "riceMonitoringShort": "Theo dõi lúa",
+    "alertsShort": "Cảnh báo"
   },
   "screens": {
     "dashboard": "Lũ",
@@ -335,7 +369,7 @@
     "floodScenarios": "Phương án",
     "yieldPrediction": "Năng suất",
     "variety": "Giống lúa",
-    "activity": "Hoạt động",
+    "activity": "Nhật ký ruộng",
     "proof": "Hồ sơ",
     "alerts": "Cảnh báo"
   },
@@ -506,7 +540,7 @@
   },
   "activity": {
     "eyebrow": "Nhật ký đồng ruộng",
-    "title": "Sổ hoạt động",
+    "title": "Nhật ký ruộng",
     "description": "Ghi chép liên tục những gì xảy ra trên ruộng — sâu bệnh, sinh trưởng, chi phí và ghi chú.",
     "timelineTitle": "Hoạt động gần đây",
     "dayTotal": "Chi: {amount} ₫",
@@ -518,7 +552,6 @@
     "notePlaceholder": "Hôm nay ruộng có gì?",
     "amount": "Số tiền (VND)",
     "save": "Lưu ghi chép",
-    "notPersisted": "Đây là bản xem thử — ghi chép không được lưu khi tải lại trang.",
     "todayLabel": "Hôm nay",
     "types": {
       "disease": "Sâu bệnh",
@@ -555,7 +588,8 @@
         "title": "Thuê công làm cỏ",
         "body": "Ba người trong một ngày cho thửa Nam và góc trũng."
       }
-    }
+    },
+    "savedOnDevice": "Đã lưu trên thiết bị này."
   },
   "stages": {
     "seedling": "Mạ non",
@@ -565,5 +599,34 @@
     "heading": "Trỗ",
     "grain_filling": "Vào chắc",
     "maturity": "Chín"
+  },
+  "onboarding": {
+    "steps": {
+      "language": "Ngôn ngữ",
+      "field": "Ruộng của bạn",
+      "done": "Hoàn tất"
+    },
+    "stepCount": "Bước {step}/{total}",
+    "languageQuestion": "Chọn ngôn ngữ của bạn",
+    "tagline": "FloodGuard biến dự báo lũ thành quyết định thu hoạch, giúp bạn biết khi nào nên gặt trước khi nước lên.",
+    "continue": "Tiếp tục",
+    "back": "Quay lại",
+    "fieldQuestion": "Cho chúng tôi biết về ruộng của bạn",
+    "farmerName": "Tên của bạn",
+    "farmerNamePlaceholder": "VD: Nguyễn Văn A",
+    "province": "Tỉnh / khu vực",
+    "provincePlaceholder": "VD: An Giang",
+    "useLocation": "Dùng vị trí hiện tại của tôi",
+    "locating": "Đang xác định vị trí…",
+    "locationCaptured": "Đã xác định vị trí.",
+    "locationSkip": "Không sao — bạn có thể bổ sung sau.",
+    "crop": "Cây trồng chính",
+    "area": "Diện tích ruộng (ha)",
+    "plantingDate": "Ngày gieo trồng",
+    "skip": "Bỏ qua, làm sau",
+    "doneTitle": "Đã sẵn sàng",
+    "doneBody": "Chúng tôi sẽ dùng thông tin này để cá nhân hoá cảnh báo lũ và khuyến nghị thu hoạch cho ruộng của bạn.",
+    "enter": "Vào FloodGuard",
+    "notSet": "Chưa nhập"
   }
 }

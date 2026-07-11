@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, Check, RotateCcw, Sprout } from "lucide-react";
+import { Check, RotateCcw, Sprout } from "lucide-react";
 
-import { MockNotice, ScreenHeader, SkeletonBlock } from "../components/SharedUI.jsx";
+import { MockNotice, ScreenHeader, SkeletonBlock, WizardActions, WizardProgress } from "../components/SharedUI.jsx";
 import { ConfidenceMeter } from "../components/charts/ConfidenceMeter.jsx";
 import { useMockDelay } from "../hooks/useMockDelay.js";
 import {
@@ -59,7 +59,12 @@ export function VarietyAdvisor({ t }) {
 
       {!showResult && (
         <div className="card">
-          <ProgressRail step={step} total={STEP_KEYS.length} t={t} />
+          <WizardProgress
+            stepLabel={t(`variety.steps.${STEP_KEYS[step]}`)}
+            stepIndex={step}
+            totalSteps={STEP_KEYS.length}
+            countLabel={t("variety.stepCount", { step: step + 1, total: STEP_KEYS.length })}
+          />
 
           <div className="wizard-step" key={step}>
             {step === 0 && <SoilStep answers={answers} set={set} t={t} />}
@@ -67,21 +72,13 @@ export function VarietyAdvisor({ t }) {
             {step === 2 && <PriorityStep answers={answers} set={set} t={t} />}
           </div>
 
-          <div className="wizard-actions">
-            <button
-              type="button"
-              className="btn btn-ghost"
-              onClick={() => setStep(step - 1)}
-              disabled={step === 0}
-            >
-              <ArrowLeft size={14} aria-hidden="true" />
-              {t("variety.back")}
-            </button>
-            <button type="button" className="btn btn-primary" onClick={next}>
-              {step === STEP_KEYS.length - 1 ? t("variety.findVariety") : t("variety.next")}
-              <ArrowRight size={14} aria-hidden="true" />
-            </button>
-          </div>
+          <WizardActions
+            onBack={() => setStep(step - 1)}
+            onNext={next}
+            backLabel={t("variety.back")}
+            nextLabel={step === STEP_KEYS.length - 1 ? t("variety.findVariety") : t("variety.next")}
+            backDisabled={step === 0}
+          />
         </div>
       )}
 
@@ -93,20 +90,6 @@ export function VarietyAdvisor({ t }) {
       )}
 
       {phase === "done" && <VarietyResult t={t} onRestart={restart} />}
-    </div>
-  );
-}
-
-function ProgressRail({ step, total, t }) {
-  return (
-    <div className="progress-rail">
-      <div className="progress-rail-track" aria-hidden="true">
-        <div className="progress-rail-fill" style={{ width: `${((step + 1) / total) * 100}%` }} />
-      </div>
-      <div className="progress-rail-meta">
-        <span className="eyebrow">{t(`variety.steps.${STEP_KEYS[step]}`)}</span>
-        <span className="progress-rail-count">{t("variety.stepCount", { step: step + 1, total })}</span>
-      </div>
     </div>
   );
 }
